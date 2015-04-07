@@ -1,4 +1,5 @@
 target
+sakuli_inst
 **/integration-test/temp-db-sahi
 **/install/*.zip
 **/_logs
