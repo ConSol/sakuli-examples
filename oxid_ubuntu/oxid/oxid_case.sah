@@ -1,0 +1,138 @@
+﻿ 
+_include("../../../_include/sakuli.inc");
+var testCase = new TestCase(80, 100);
+var env = new Environment();
+var screen = new Region();
+try {	 
+	 //Anmeldung am Shop
+	 _assertExists(_link("Anmelden"));
+	 _assert(_isVisible(_link("Anmelden")));
+	 _click(_link("Anmelden"));
+	 _click(_textbox("lgn_usr[1]"));
+	 _setValue(_textbox("lgn_usr[1]"), "sahimon.itoring@googlemail.com");
+	 _highlight(_password("lgn_pwd"));
+	 _click(_password("lgn_pwd"));
+	 _setValue(_password("lgn_pwd"), "sahimon");
+	 _highlight(_submit("Anmelden"));
+	 _click(_submit("Anmelden"));
+	 
+	testCase.endOfStep("Login", 10);
+
+	 //gehe zum Warenbkorb
+	 _highlight(_link("Warenkorb"));
+	 _click(_link("Warenkorb"));
+
+	 //wenn Warenkorb nicht leer -> löschen
+	 if (! (_condition(_exists(_div("Der Warenkorb ist leer."))))) {
+		 _highlight(_checkbox("checkAll"));
+		 _click(_checkbox("checkAll"));
+		 _highlight(_submit("entfernen"));
+		 _click(_submit("entfernen"));
+	 }
+	testCase.endOfStep("Warenkorb leeren", 10);
+	 // gehe zur Startseite
+	 _assertExists(_link("Startseite"));
+	 _highlight(_link("Startseite"));
+	 _click(_link("Startseite"));
+
+
+
+	 // Artikel 1 ========================================
+	 // suche Artikel 
+	 _highlight(_textbox("searchparam"));
+	 _click(_textbox("searchparam"));
+	 _setValue(_textbox("searchparam"), "1301");
+	 _highlight(_submit("searchSubmit"));
+	 _click(_submit("searchSubmit"));
+
+	 // prüfe Beschreibung
+	 _highlight(_link("Kiteboard RRD TOXIC WAVE2"));
+	 _assert(_isVisible(_link("Kiteboard RRD TOXIC WAVE2")));
+	 _click(_link("Kiteboard RRD TOXIC WAVE2"));
+
+	 // bestellen 
+	 _highlight(_textbox("am"));
+	 _click(_textbox("am"));
+	 _setValue(_textbox("am"), "2");
+	 _highlight(_submit("in den Warenkorb"));
+	 _click(_submit("in den Warenkorb"));
+
+	 
+	 // Artikel 2 ===============================================
+	 // suche Artikel 
+	 _highlight(_textbox("searchparam"));
+	 _click(_textbox("searchparam"));
+	 _setValue(_textbox("searchparam"), "1505");
+	 _highlight(_submit("searchSubmit"));
+	 _click(_submit("searchSubmit"));
+	 // prüfe Beschreibung
+	 _highlight(_link("Helm AHM 5000"));
+	 _assertExists(_link("Helm AHM 5000"));
+	 _assert(_isVisible(_link("Helm AHM 5000")));
+	 _click(_link("Helm AHM 5000"));
+	 // bestellen
+	 _highlight(_textbox("am"));
+	 _setValue(_textbox("am"), "3");
+	 _highlight(_submit("in den Warenkorb"));
+	 _click(_submit("in den Warenkorb"));
+	 _click(_image("x.png"));
+	 testCase.endOfStep("Artikel Bestellung", 20)
+	 
+	 
+	 // prüfe Warenkorb-Inhalt ====================================
+	 _assertExists(_link("Warenkorb"));
+	 _assert(_isVisible(_link("Warenkorb")));
+	 _assertEqual("Warenkorb", _getText(_link("Warenkorb")));
+	 _assertContainsText("Warenkorb", _link("Warenkorb"));
+	 _highlight(_link("Warenkorb"));
+	 _click(_link("Warenkorb"));
+	 // prüfe Summe
+	 _highlight(_cell("1.153,00 €[1]"));
+	 _assert(_isVisible(_cell("1.153,00 €[1]")));
+
+	  testCase.endOfStep("Warenkorb Check", 10);
+	 
+	 //Bestellung drucken
+	 screen.type("p", Key.CTRL);
+	 screen.waitForImage("print_dialog",10);
+	 screen.waitForImage("ok",5).highlight().click();
+	 
+	 //Dateiname mit Timestamp
+	 var name = "sakuli_test_" + Date.now();
+	 screen.waitForImage("pdfname",10);
+	 env.sleep(1);
+	 screen.type(name);
+	 
+	 //alternativ: Button mit TAB anspringen
+	 screen.type(Key.TAB).type(Key.TAB).type(Key.TAB).type(Key.TAB).type(Key.TAB).type(Key.TAB).type(Key.SPACE);
+	 
+	 screen.waitForImage("speichern",10);
+	 screen.type(name).type(Key.ENTER);
+
+	 testCase.endOfStep("PDF generieren", 20);
+
+	 //Adobe Reader startet nun; prüfe ob Summe stimmt
+	 screen.waitForImage("adobe_toolbar",20);
+	 //maximieren
+	 screen.type(Key.SPACE, Key.ALT).type("x");
+	 env.sleep(2);
+	 //zoome auf 75%
+	 screen.find("zoom_dropdown").click();
+	 screen.waitForImage("zoom_75",5).click();
+	 screen.waitForImage("pdf_summe",20).highlight();
+	 
+	 testCase.endOfStep("PDF anzeigen", 20);
+
+	// Logout ========================================
+	_highlight(_link("Logout"));
+	_click(_link("Logout"));
+	_assertExists(_link("Anmelden"));
+	_assert(_isVisible(_link("Anmelden")));
+
+} catch (e) {
+    testCase.handleException(e);
+} finally {
+	//_execute("cscript.exe " + 'C:\\sakuli\\modwindow.vbs sakuli_test close');
+    testCase.saveResult();
+}
+
