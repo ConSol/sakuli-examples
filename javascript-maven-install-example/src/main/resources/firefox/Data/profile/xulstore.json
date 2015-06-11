@@ -1,0 +1,28 @@
+{
+  "chrome://browser/content/browser.xul": {
+    "navigator-toolbox": {
+      "iconsize": "small"
+    },
+    "main-window": {
+      "width": "1600",
+      "height": "900",
+      "screenX": "0",
+      "screenY": "0",
+      "sizemode": "maximized"
+    },
+    "titlebar-placeholder-on-menubar-for-caption-buttons": {
+      "width": "100"
+    },
+    "titlebar-placeholder-on-TabsToolbar-for-captions-buttons": {
+      "width": "100"
+    },
+    "sidebar-box": {
+      "sidebarcommand": "",
+      "width": "",
+      "src": ""
+    },
+    "sidebar-title": {
+      "value": ""
+    }
+  }
+}

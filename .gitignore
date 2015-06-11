@@ -1,10 +1,10 @@
 target
-sakuli_inst
-**/integration-test/temp-db-sahi
-**/install/*.zip
+core/target
+integration-test/target
+integration-test/temp-db-sahi
+install/*.zip
 **/_logs
-sahi
-firefox
 .idea
 *.iml
 *.log
+sakuli_inst
