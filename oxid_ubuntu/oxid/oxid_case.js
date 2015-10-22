@@ -137,7 +137,7 @@ try {
 } catch (e) {
     testCase.handleException(e);
 } finally {
-	 pdfviewer.closeApp();
+	 pdfviewer.close();
     testCase.saveResult();
     
 }
