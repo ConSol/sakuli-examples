@@ -8,3 +8,4 @@ install/*.zip
 *.iml
 *.log
 sakuli_inst
+sakuli.properties

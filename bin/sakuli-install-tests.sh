@@ -32,7 +32,7 @@ cd $SAKULI_INST/sakuli-examples
 echo "Searching for changes on both sides..."
 
 if (($(git status --porcelain | egrep "^(\?| ?M)" | wc -l))); then 
-	echo "Working copy is dirty (uncommitted changes). Commit and push first or remve the file(s). Leaving untouched and exiting. Details:"
+	echo "Working copy is dirty (uncommitted changes). Commit and push first or remove the file(s). Leaving untouched."
 	$GIT status
 	exit 0
 fi
