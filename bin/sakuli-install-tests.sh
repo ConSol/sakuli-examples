@@ -4,7 +4,7 @@ GITURL="git@github.com:ConSol/sakuli-examples.git"
 
 GIT=$(which git)
 if [ ! -x "$GIT" ]; then 
-	echo "ERROR: GIT binary not found."
+	echo "> ERROR: GIT binary not found."
 	exit 1; 
 fi
 
@@ -12,27 +12,25 @@ fi
 SAKULI_HOME=$(echo "$SAKULI_HOME" | sed 's#/$##')
 SAKULI_INST=${SAKULI_HOME%/*}
 if [ ! -d "$SAKULI_INST" ]; then 
-	echo "ERROR: Could not determine SAKULI_INST from SAKULI_HOME ($SAKULI_HOME)!"
+	echo "> ERROR: Could not determine SAKULI_INST from SAKULI_HOME ($SAKULI_HOME)!"
 	exit 1
 fi
 
 if [ ! -d $SAKULI_INST/sakuli-examples ]; then
 	echo "> sakuli-examples not found; trying to clone from GitHub... "
 	$GIT clone $GITURL
-	if [ -d $SAKULI_INST/sakuli-examples ]; then 
-		echo -n " done."
-	else
-		echo -n "FAILED. Exting."
+	if [ ! -d $SAKULI_INST/sakuli-examples ]; then 
+		echo -n "> FAILED. Exiting."
 		exit 1
 	fi
 fi 
 
 cd $SAKULI_INST/sakuli-examples
 
-echo "Searching for changes on both sides..."
+echo "> Searching for changes on both sides..."
 
 if (($(git status --porcelain | egrep "^(\?| ?M)" | wc -l))); then 
-	echo "Working copy is dirty (uncommitted changes). Commit and push first or remove the file(s). Leaving untouched."
+	echo "> Working copy is dirty (uncommitted changes). Commit and push first or remove the file(s). Leaving untouched."
 	$GIT status
 	exit 0
 fi
