@@ -1,5 +1,8 @@
 #!/bin/bash
 clear
+
+# FIXME: compare MD5 sum on labs.consol.de to only download ZIP when needed
+
 URL="https://labs.consol.de/sakuli/install/sakuli-v0.9.2-SNAPSHOT.zip"
 VERSION=$(echo $URL | sed -e 's/.zip$//' -e 's/.*\/\(sakuli-.*$\)/\1/')
 DOWNLOAD=/tmp
