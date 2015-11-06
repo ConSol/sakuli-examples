@@ -15,6 +15,10 @@ do
 		"--force-test-update")
 			FORCE_TEST_UPDATE=$1
 			;;
+		"--file")
+			shift
+			RUNFILE=$1
+			;;
 	esac
     	shift
 done
