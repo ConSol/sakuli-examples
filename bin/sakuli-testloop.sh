@@ -25,8 +25,8 @@ if [ ! -r "$RUNFILE" ]; then
 	exit 1
 fi
 
-#$DIR/sakuli-install-latest.sh $FORCE_SAKULI_UPDATE
-#$DIR/sakuli-install-tests.sh $FORCE_TEST_UPDATE
+$DIR/sakuli-install-latest.sh $FORCE_SAKULI_UPDATE
+$DIR/sakuli-install-tests.sh $FORCE_TEST_UPDATE
 
 for suite in $(cat $RUNFILE | grep -v '^#'); do 
 	echo $suite
