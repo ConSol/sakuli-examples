@@ -1,10 +1,11 @@
 #!/bin/bash
 
+export DISPLAY=:0.0
 source ~/.bashrc
-RUNFILE=suites.run
+DIR=`dirname $0`
+RUNFILE=$DIR/../suites.run
 RUNFILE=${1-$RUNFILE}
 
-DIR=`dirname $0`
 
 
 if [ ! -r "$RUNFILE" ]; then
@@ -12,11 +13,11 @@ if [ ! -r "$RUNFILE" ]; then
 	exit 1
 fi
 
-#$DIR/sakuli-install-latest.sh --force-update
+$DIR/sakuli-install-latest.sh --force-update
 #$DIR/sakuli-install-tests.sh
 
 while read suite; do 
 	echo $suite
-	$SAKULI_HOME/bin/sakuli.sh --run $SAKULI_HOME/../sakuli-examples/$suite --vnc;
+	$SAKULI_HOME/bin/sakuli.sh --run $SAKULI_HOME/../sakuli-examples/$suite --vnc
 done <$RUNFILE
 
