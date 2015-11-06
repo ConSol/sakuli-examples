@@ -8,6 +8,10 @@ VERSION=$(echo $URL | sed -e 's/.zip$//' -e 's/.*\/\(sakuli-.*$\)/\1/')
 DOWNLOAD=/tmp
 FORCE_UPDATE=$1
 
+if [ -z "$SAKULI_HOME" ]; then 
+	echo "> SAKULI_HOME is not set. Exiting."
+	exit 1
+fi
 # remove last slash
 SAKULI_HOME=$(echo "$SAKULI_HOME" | sed 's#/$##')
 SAKULI_INST=${SAKULI_HOME%/*}
