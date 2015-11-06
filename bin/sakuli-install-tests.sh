@@ -35,7 +35,8 @@ echo "> Searching for changes on both sides..."
 if (($(git status --porcelain | egrep "^(\?| ?M)" | wc -l))); then
         echo "> Working copy is dirty (uncommitted changes)."
         $GIT status
-        if [ "$FORCE_UPDATE" == "--force-update" ]; then
+        if [ "$FORCE_UPDATE" == "--force-test-update" ]; then
+		echo "> 'force-test-update' is set, will reset to HEAD of GitHub."
                 git reset --hard
         else
                 echo "Commit and push first or remove the file(s). Use --force-update to force pull from GitHub. Caution!"
