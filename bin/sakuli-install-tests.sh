@@ -3,6 +3,8 @@ clear
 source ~/.bashrc
 GITURL="git@github.com:ConSol/sakuli-examples.git"
 
+FORCE_UPDATE=$1
+
 GIT=$(which git)
 if [ ! -x "$GIT" ]; then 
 	echo "> ERROR: GIT binary not found."
@@ -30,10 +32,15 @@ cd $SAKULI_INST/sakuli-examples
 
 echo "> Searching for changes on both sides..."
 
-if (($(git status --porcelain | egrep "^(\?| ?M)" | wc -l))); then 
-	echo "> Working copy is dirty (uncommitted changes). Commit and push first or remove the file(s). Leaving untouched."
-	$GIT status
-	exit 0
+if (($(git status --porcelain | egrep "^(\?| ?M)" | wc -l))); then
+        echo "> Working copy is dirty (uncommitted changes)."
+        $GIT status
+        if [ "$FORCE_UPDATE" == "--force-update" ]; then
+                git reset --hard
+        else
+                echo "Commit and push first or remove the file(s). Use --force-update to force pull from GitHub. Caution!"
+                exit 0
+        fi
 fi
 
 $GIT remote update

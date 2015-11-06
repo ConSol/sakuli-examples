@@ -30,7 +30,7 @@ if [ -d $SAKULI_INST/$VERSION ]; then
 	echo "> Directory "
 fi
 echo "> Installing..."
-if [ "$FORCE_UPDATE" -eq "--force-update" ]; then 
+if [ "$FORCE_UPDATE" == "--force-update" ]; then 
 	read -p "> Directory $SAKULI_INST/$VERSION already exists. Remove? (y/n)" answer
 	if [ $answer != "y" ]; then 
 		echo "Aborted by user."
