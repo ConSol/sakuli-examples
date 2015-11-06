@@ -30,8 +30,9 @@ if [ ! -r "$RUNFILE" ]; then
 fi
 
 $DIR/sakuli-install-latest.sh $FORCE_SAKULI_UPDATE
+[ $? -gt 0 ] && exit 1; 
 $DIR/sakuli-install-tests.sh $FORCE_TEST_UPDATE
-
+[ $? -gt 0 ] && exit 1; 
 for suite in $(cat $RUNFILE | grep -v '^#'); do 
 	echo $suite
 	$SAKULI_HOME/bin/sakuli.sh --run $SAKULI_HOME/../sakuli-examples/$suite --vnc

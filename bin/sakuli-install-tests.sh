@@ -19,6 +19,7 @@ if [ ! -d "$SAKULI_INST" ]; then
 	exit 1
 fi
 
+cd $SAKULI_INST
 if [ ! -d $SAKULI_INST/sakuli-examples ]; then
 	echo "> sakuli-examples not found; trying to clone from GitHub... "
 	$GIT clone $GITURL
