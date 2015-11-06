@@ -1,5 +1,6 @@
 #!/bin/bash
 clear 
+source ~/.bashrc
 GITURL="git@github.com:ConSol/sakuli-examples.git"
 
 GIT=$(which git)
