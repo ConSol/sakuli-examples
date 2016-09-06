@@ -38,7 +38,7 @@ try {
     //uncomment this line to raise an exception which sends a screenshot to OMD
     // _highlight(_link("SSL Manager_DOES_NOT_EXIST"));
 
-    _highlight(_link("SSL ManagerX"));
+    _highlight(_link("SSL Manager"));
     _highlight(_link("Logs"));
     _highlight(_link("Online Documentation"));
     _highlight(_link("Test Pages"));
