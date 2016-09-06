@@ -7,7 +7,7 @@ Keep in mind that this is only a demo setup; it is not meant for production use,
 * this example starts the Sakuli test in "loop" mode. That means that the container lives as long you do not abort the loop execution. Great for testing, but the container will contain more and more cached data; in production each container should live for only one test execution to start each time with a clean, predictable environment. 
 * The OMD Labs container is great to build tests and examples like this; the Ansible drop-in mode enables you to quickly deploy changes (and reuse existing Ansible recipes). However, there is no work done (yet) to keep the monitoring data (logs, performance data) persistent. A Docker-based OMD Labs environment would be based on multiple container, volumes and so on. 
 
-XXXXXXXXXTrotz allem, it is a great starting point to learn how to use Sakuli together with OMD. Have fun. 
+Nevertheless it is a great starting point to learn how to use Sakuli together with OMD. Have fun. 
 
 
 ## Quick win: Start the demo environment
@@ -65,8 +65,19 @@ sakuli:
     links:
     - omdlabs:omd
 ```
+This block 
 
-* 
+* starts a container *sakulie2e*, derived from the image *consol/sakuli-ubuntu-xfce:dev*
+* mounts three folders into the container: 
+  * `./sakuli_docker_test/` - Sakuli test suite. 
+  * `./sahi_ff_profile_template` - Firefox profile template. On each container start, Sahi creates a temporarily browser profile based on this folder. 
+  * `./sahi_certs` - Keystore files (Sahi) for certificates signed by Sahi.
+* exposes port 5901/6901 
+* creates a link to the container omdlabs (alias: omd)
+* runs the "sakuli" starter inside the container with arguments `run /root/sakuli_docker_test -loop 1`
+
+
+
 
 ### OMD startup
 
@@ -79,6 +90,15 @@ omdlabs:
     ports:
     - "8443:443"
 ```
+
+This block
+
+* starts a container *omdlabs*, derived from the image *consol/sakuli-omd-labs-ubuntu*
+* mounts one folder into the container: 
+  * `./omd_ansible_drop-in_role/` - Ansible drop-in role
+* exposes port 8443
+
+
 
 
 
