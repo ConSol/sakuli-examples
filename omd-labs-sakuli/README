@@ -30,13 +30,13 @@ Nothing exciting so far. Let's connect to both containers to see what's happenin
 
 ### Sakuli VNC 
 
-Start a VNC viewer and connect to `localhost:5901` (in case you are running Docker on localhost) or `DOCKERHOST:5901` for a dedicated Docker host/Docker machine. 
+Start a VNC viewer and connect to `localhost:5901` (in case you are running Docker on localhost) or `DOCKERHOST:5901` for a dedicated Docker host/Docker machine. On a Mac, you can just open the URL `vnc://localhost:5901` in your browser.
 
-On a Mac, you can just open the URL `vnc://localhost:5901` in your browser.
+Alternatively you can also open `http://localhost:6901/vnc_auto.html` to get connected.
 
 The default password for this VNC session is `sakuli`. 
 
-You should see Sakuli testing the browser, typing a calculation on calc and writing a success message on gedit. After that the test gets shut down and gets started from the beginning. 
+You should see Sakuli testing the browser, typing a calculation on calc and writing a success message on gedit. After that the test gets shut down and starts from the beginning. 
 
 ### OMD Labs site 
 
@@ -102,9 +102,17 @@ This block
 
 
 
-## Extend 
+## Make your own test 
 
-To have a real-life example, we will clone the existing test and change it so that it can test the Thruk GUI of the OMD Docker container. 
+In the following we will create a new Sakuli test which will check the OMD site. This small test should
+
+1. login to OMD
+* assert that the check "omd_thruk" exists 
+* check that the logo of Thruk is displayed properly
+
+**Steps 1+2** are done with Sahi methods (web-based). For the test creation you do not depend on a docker container; you could also install Sakuli on a desktop system with firefox and record the steps there. The technology is always the same. 
+
+**Step 3** will be done with a Sikuli method, which tries to search a previously recorded screenshot of the logo on the current screen. Sikuli-based actions should always be recorded on the target system.  
 
 ### clone the existing test suite
 
@@ -112,9 +120,9 @@ Create a full copy of `sakuli_docker_test`:
    
     cp -R sakuli_docker_test sakuli_omd 
     
-Delete all unneeded files: 
+Delete all unneeded items: 
 
-  * `case1/centos`
+  * `case1/centos/`
   * `case1/*.png`
 
 Edit `sakuli_omd/case1/sakuli_demo.js` and remove everything but this code skeleton: 
@@ -135,20 +143,26 @@ Edit `sakuli_omd/case1/sakuli_demo.js` and remove everything but this code skele
 
 (The `sleep` command helps to pause the test at a certain position, examine web content, take screenshots etc. You will use this very often.)
 
-Now tell Docker to mount `sakuli_omd` into the container. This is done in `docker-compose.yml`: 
+Now tell Docker to mount `sakuli_omd` into the container (instead of `sakuli_docker_test`). This is done in `docker-compose.yml`: 
    
     ...
     volumes:
-    - ./sakuli_omd:/root/sakuli_docker_test 
+    # - ./sakuli_docker_test:/root/sakuli_docker_test
+    - ./sakuli_omd:/root/sakuli_docker_test
+    - ./sahi_ff_profile_template:/root/sakuli/sahi/config/ff_profile_template
+    - ./sahi_certs:/root/sakuli/sahi/userdata/certs
     ...
 
 Edit `sakuli_omd/testsuite.properties` to change the name of the test. This id will be used as the service name in Nagios: 
 
     testsuite.id=omd_thruk
+    testsuite.name=OMD Test
+    
+(On the bottom of this file you can find the `sakuli.forwarder.gearman.X` properties which describe the receiving side. This could also be defined on a global basis.)
  
-Clone the Nagios service object and give it the same name as `testsuite.id`: 
+Create the Nagios service object and use the `testsuite.id` as `service_description`: 
 
-    vim omd_ansible_drop-in_role/files/skel/etc/nagios/conf.d/sakuli_nagios_objects.cfg
+    vim omd_ansible_drop-in_role/files/sakuli_nagios_objects.cfg
     ...
     define service {
       service_description            omd_thruk
@@ -156,28 +170,126 @@ Clone the Nagios service object and give it the same name as `testsuite.id`:
       use                            tpl_s_sakuli_gearman
     }
     
-Stop and remove all running containers and re-run `docker-compose up`. Thre result should be nearly the same as before, but with a new (empty) test and a new Nagios service "omd_thruk" to receive the results.
+Stop and remove all running containers and re-run `docker-compose up`. You should now see a new service "omd_thruk" in OMD. 
 
-### HTTPS handling in Docker containers
+Also reconnect to the Sakuli container (VNC). You should see the Sahi default page in Firefox. The test sleeps for 1000000 seconds - enough time to look around. 
 
-The web testing component of Sakuli, Sahi, acts as a "man in the middle" (=Proxy) between the web server and the browser. HTTPS web sites are fetched by Sahi using the original server certificate and delivered to the browser with a certificate 
+Stop both containers again. 
 
+### Save faked certificates 
 
-#### Saving the faked certificates 
+The web testing component of Sakuli, Sahi, acts as a "man in the middle" (=Proxy) between the web server and the browser. HTTPS web sites are fetched by Sahi using the original server certificate and delivered to the browser with a self-signed certificate from Sahi. Those "fake" certificates are refused by the browser by default and have to be accepted once. 
 
-Start the Sakuli container:  
+![image](_pics/certchain.png)
 
-    docker run -it --rm -v $(pwd)/sahi_certs:/root/sakuli/sahi/userdata/certs -v $(pwd)/sahi_ff_profile_template:/root/sakuli/sahi/config/ff_profile_template -p 5901:5901 local/sakuli-ubuntu-xfce:docker-playground bash
+Start the OMD container: 
 
-This command starts the Sakuli docker container with two host mounted volumes: 
- 
-* `sahi_certs` -> `/root/sakuli/sahi/userdata/certs`: Kaystore  
+    docker-compose up omdlabs [enter]
 
-HTTPS
+Then start the Sakuli container with bash and start the Sakuli Dashboard - notice that we have also used the `--link` parameter to be able to talk to OMD from the Sakuli container: 
+  
+    docker run -it --rm \
+      -v $(pwd)/sahi_certs:/root/sakuli/sahi/userdata/certs \
+      -v $(pwd)/sahi_ff_profile_template:/root/sakuli/sahi/config/ff_profile_template \
+      -p 6901:6901 \
+      --link omdlabs:omd \
+      consol/sakuli-ubuntu-xfce:dev bash [enter]    
+    root@e91f0c7a8935:~# cd /root/sakuli/sahi/userdata/bin [enter] 
+    root@e91f0c7a8935:# ./start_dashboard.sh [enter]
 
-Screenshots 
+The VNC session will now show the Sahi Dashboard, from where you can start Firefox. On the Sahi start page do the following steps:  
 
-Graph!
+1. click on the link "**SSL Manager**"
+- on the warning message "connection is not secure", click on *Advanced* -> *Add Exception...* -> *Confirm*
+* The following page "SSL Manager" shows a green mark right of the domain *sahi.example.com* (fake domain), showing that the certificate of Sahi itself is now accepted.
+* Now open the URL *http://omd/demo* in a new tab and accept this certificate as well.  
+* As soon as you are forwarded to the login page of Thruk, refresh the SSL Manager page and check that the certificate of *omd* is now also accepted.  
+
+(For every other domain you would repeat step 4+5.) Now shutdown the Sahi dashboard (Ctrl-C). 
+
+Two things happened now: 
+
+* Sahi added a Java Keystore for each accepted certificate domain (e.g. `sahi_example_com`, `omd`) in `~/sakuli/sahi/userdata/certs/`. Because the Sakuli container mounts this directory directly, we have nothing more to do here. 
+* The Firefox profile `~/sakuli/sahi/userdata/browser/ff/profiles/sahi0` now contains an updated version of 
+  * `cert8.db` - certificate store
+  * `key3.db` - key parts of certificates
+  * `cert_override.txt` - list of certificate exceptions
+  
+Copy the last three files into the template folder for FF profiles (which we have mounted): 
+
+    cd ~/sakuli/sahi/userdata/browser/ff/profiles/sahi0 
+    cp cert8.db cert_override.txt key3.db ~/sakuli/sahi/config/ff_profile_template/
+
+If you terminate the Sakuli container and start a new one, you should be able to open the SSL Manager as well as the OMD login page without any certificate hurdles. 
+
+### Record test steps
+
+* Start both containers again: 
+
+    docker-compose up 
+    
+* Connect to the Sakuli container via VNC and click on the **Sahi Controller** Link:
+
+![image](_pics/sahi_controller.png)
+
+* On the controller tab "Record" choose a file name and press "Record". From this point, Sahi will write all steps into the file. 
+* Navigate to **https://omd/demo** 
+* **Test step 1**: (Login)
+  * login with **"omdadmin/omd"** (it might happen that some characters get lost while typing. This is related to the Sahi Javascript in the browser talking to the Rhino Engine of Sahi. This will not happen on playback.)
+* **Test step 2**: (Service)
+  * click on "**Services**"
+  * To check if there is a Nagios service "omd_thruk": 
+    * hold down **Ctrl** and move the mouse over the Nagios service "omd_thruk". The Controller will display the Sahi accessor methods to access the element at the current mouse position. 
+    * Click on **"Assert"** to auto-generate four different assertion methods. Choose one, delete the other three and click on **"Append to script"**. In this way you can also record actions which are only done by Sahi (e.g. assert that something exists/contains text/... )
+    * End the record session by clicking on "**Stop**".
+    * connect to the Sakuli container with bash and copy the recorded actions into the host mounted test suite folder (so that it gets out of the container):
+
+```
+	docker exec sakulie2e
+    root@3fb46e6d9d94:~# cp sakuli/sahi/userdata/scripts/foo.sah sakuli_docker_test/case1/
+```
+
+* **Test step 3**: (Thruk logo)
+  * take a screenshot of the Thruk logo in the upper left corner. Currently there is no screenshot tool installed in the container; use the one of your host system.  
+  * Save the image on the host file system in `./sakuli_omd/case1/thruk_logo.png`
+
+![image](_pics/thruk_logo.jpg)
+
+When you are sure that the recorded Sahi script and the screenshot are saved in the host mounted containers, stop both containers again. 
+
+### Write the test
+
+On the host system you can now put all pieces together. 
+
+* Open `sakuli_demo.js` and delete everything in the "try" block
+* insert the "navigateTo"-line as shown below
+* paste the content of the recorded Sahi script
+* write the Sikuli method to search for the Thruk logo
+
+```
+    _dynamicInclude($includeFolder);
+    var testCase = new TestCase(20, 30);
+    var env = new Environment();
+    var screen = new Region();
+
+    try {
+      _navigateTo("https://omd/demo");
+      //Sahi code
+      _setValue(_textbox("login"), "omdadmin");
+      _setValue(_password("password"), "omd");
+      _click(_submit("Login"));
+      _click(_link("Services"));
+      _click(_link("omd_thruk"));
+      _assert(_isVisible(_link("omd_thruk")));
+      // Sikuli method
+      screen.waitForImage("thruk_logo",10).highlight();
+    } catch (e) {
+        testCase.handleException(e);
+    } finally {
+        testCase.saveResult();
+    }
+```
+
 
 
 # run OMD labs (Ubuntu) with Sakuli Extension:
