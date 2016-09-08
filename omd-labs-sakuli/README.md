@@ -46,7 +46,7 @@ Open the URL `https://localhost:8443/demo` (or `https://DOCKERHOST:8443/demo`) t
 
 ## Explore 
 
-Open `docker-compose.xml` to see how both containers were started: 
+Open `docker-compose.yml` to see how both containers were started: 
 
 ### Sakuli startup
 
@@ -70,7 +70,7 @@ This block
 * starts a container *sakulie2e*, derived from the image *consol/sakuli-ubuntu-xfce:dev*
 * mounts three folders into the container: 
   * `./sakuli_docker_test/` - Sakuli test suite. 
-  * `./sahi_ff_profile_template` - Firefox profile template. On each container start, Sahi creates a temporarily browser profile based on this folder. 
+  * `./sahi_ff_profile_template` - Firefox profile template. 
   * `./sahi_certs` - Keystore files (Sahi) for certificates signed by Sahi.
 * exposes port 5901/6901 
 * creates a link to the container omdlabs (alias: omd)
@@ -175,6 +175,8 @@ Create the Nagios service object and use the `testsuite.id` as `service_descript
       host_name                      sakuli_client
       use                            tpl_s_sakuli_gearman
     }
+ 
+### Test adaptions
     
 Stop and remove all running containers and re-run `docker-compose up`. You should now see a new service "omd_thruk" in OMD. 
 
@@ -200,6 +202,18 @@ Then start the Sakuli container with bash and start the Sakuli Dashboard - notic
       -p 6901:6901 \
       --link omdlabs:omd \
       consol/sakuli-ubuntu-xfce:dev bash [enter]    
+
+![image](_pics/mounted_volumes.png)
+
+As the picturs shows, in the container there are three important folders: 
+
+* `certs`: Keystore files for certificates signed by Sahi.
+* `ff_profile_template`: On each container start, Sahi creates a temporarily browser profile based on this folder. 
+* `sahi0`: profile dir for Firefox. Files which are not provided by `ff_profile_template` are created by FF on startup.
+
+
+Start the Sahi dashboard: 
+
     root@e91f0c7a8935:~# cd /root/sakuli/sahi/userdata/bin [enter] 
     root@e91f0c7a8935:# ./start_dashboard.sh [enter]
 
@@ -211,7 +225,7 @@ The VNC session will now show the Sahi Dashboard, from where you can start Firef
 * Now open the URL *http://omd/demo* in a new tab and accept this certificate as well.  
 * As soon as you are forwarded to the login page of Thruk, refresh the SSL Manager page and check that the certificate of *omd* is now also accepted.  
 
-(For every other domain you would repeat step 4+5.) Now shutdown the Sahi dashboard (Ctrl-C). 
+Do step 4+5 also for the IP of the OMD host (here https://172.17.0.2) and in general for every other domain you want to test with Sahi. Now shutdown the Sahi dashboard in bash (Ctrl-C). 
 
 Two things happened now: 
 
@@ -221,21 +235,18 @@ Two things happened now:
   * `key3.db` - key parts of certificates
   * `cert_override.txt` - list of certificate exceptions
   
-Copy the last three files into the template folder for FF profiles (which we have mounted): 
+**Very important now:** Copy the last three files into the template folder for FF profiles (which we have mounted) - only then they get on the host file system: 
 
     cd ~/sakuli/sahi/userdata/browser/ff/profiles/sahi0 
     cp cert8.db cert_override.txt key3.db ~/sakuli/sahi/config/ff_profile_template/
 
-If you terminate the Sakuli container and start a new one, you should be able to open the SSL Manager as well as the OMD login page without any certificate hurdles. 
+If you would terminate the Sakuli container and start a new one, you should be able to open the SSL Manager as well as the OMD login page without any certificate hurdles. 
 
 ### Record test steps
 
-* Start both containers again: 
-
-    docker-compose up 
-    
-* Connect to the Sakuli container via VNC and click on the **Sahi Controller** Link:
-
+* The OMD labs container should still be started. 
+* In Sakuli, go back to the Sahi start page and click on the **Sahi Controller** Link:
+ 
 ![image](_pics/sahi_controller.png)
 
 * On the controller tab "Record" choose a file name and press "Record". From this point, Sahi will write all steps into the file. 
@@ -248,10 +259,9 @@ If you terminate the Sakuli container and start a new one, you should be able to
     * hold down **Ctrl** and move the mouse over the Nagios service "omd_thruk". The Controller will display the Sahi accessor methods to access the element at the current mouse position. 
     * Click on **"Assert"** to auto-generate four different assertion methods. Choose one, delete the other three and click on **"Append to script"**. In this way you can also record actions which are only done by Sahi (e.g. assert that something exists/contains text/... )
     * End the record session by clicking on "**Stop**".
-    * connect to the Sakuli container with bash and copy the recorded actions into the host mounted test suite folder (so that it gets out of the container):
+    * Close the Sahi Dashboard in Bash (Ctrl-C) and copy the recorded script into the test folder (which is host-mounted):
 
 ```
-	docker exec sakulie2e
     root@3fb46e6d9d94:~# cp sakuli/sahi/userdata/scripts/foo.sah sakuli_docker_test/case1/
 ```
 
@@ -296,13 +306,3 @@ On the host system you can now put all pieces together.
     }
 ```
 
-
-
-# run OMD labs (Ubuntu) with Sakuli Extension:
-docker run -it -p 8443:443 -v $(pwd)/ansible_drop-in_role:/root/ansible/dropin_role consol/omd-labs-ubuntu
-
-# run OMD labs (CentOS) with Sakuli Extension:
-docker run -it -p 8443:443 -v $(pwd)/ansible_drop-in_role:/root/ansible/dropin_role consol/omd-labs-centos
-
-# run OMD labs (Debian) with Sakuli Extension:
-docker run -it -p 8443:443 -v $(pwd)/ansible_drop-in_role:/root/ansible/dropin_role consol/omd-labs-debian
