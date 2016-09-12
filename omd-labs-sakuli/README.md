@@ -13,8 +13,8 @@ Nevertheless it is a great starting point to learn how to use Sakuli together wi
 ## Quick win: Start the demo environment
 
     git clone git@github.com:ConSol/sakuli-examples.git [enter]
-    cd sakuli/examples/sakuli-omd-labs [enter]
-    docker-dompose up [enter]
+    cd sakuli-examples/omd-labs-sakuli [enter]
+    docker-compose up [enter]
     
 Both containers, Sakuli and OMD, should start now:
 
