@@ -38,15 +38,6 @@ public class FirstExampleTest extends AbstractSakuliTest {
     }
 
     @Test
-    public void testCitrusPictures() throws Exception {
-        browser.navigateTo(CITRUS_URL);
-        env.setSimilarity(0.8);
-        screen.find("citrus_logo.png").highlight();
-        env.type(Key.END);
-        screen.find("consol_logo.png").highlight();
-    }
-
-    @Test
     public void testCitrusHtmlContent() throws Exception {
         browser.navigateTo(CITRUS_URL);
         ElementStub heading1 = browser.paragraph("Citrus Integration Testing");
@@ -61,6 +52,15 @@ public class FirstExampleTest extends AbstractSakuliTest {
         ElementStub downloadLink = browser.cell("2.6.1");
         downloadLink.highlight();
         assertTrue(downloadLink.isVisible());
+    }
+
+    @Test
+    public void testCitrusPictures() throws Exception {
+        browser.navigateTo(CITRUS_URL);
+        env.setSimilarity(0.8);
+        screen.find("citrus_logo.png").highlight();
+        env.type(Key.END);
+        screen.find("consol_logo.png").highlight();
     }
 
 }
