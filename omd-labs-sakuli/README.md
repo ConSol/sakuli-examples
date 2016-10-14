@@ -1,6 +1,6 @@
 # Tutorial: Sakuli & OMD
 
-This *docker-compose* setup shows how Sakuli and [**OMD labs**](https://labs.consol.de/de/omd/index.html) play well together. You will learn how to bring up the exmaple, explore the code to understand what's happening and learn how to deal with SSL certificates. 
+This *docker-compose* setup shows how Sakuli and [**OMD labs**](https://labs.consol.de/de/omd/index.html) play well together. You will learn how to bring up the example, explore the code to understand what's happening and learn how to deal with SSL certificates. 
 
 Keep in mind that this is only a demo setup; it is not meant for production use, because 
 
