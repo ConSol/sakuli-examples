@@ -95,7 +95,7 @@ In this example, we want to check if the UI renders the Citrus page correctly:
     cd sakuli-examples/java-example [enter]
     docker-compose up [enter]
 
-Like defined in the `docker-compose.yml`, [Docker Compose] will build a new Docker image of the `docker_image/Dockerfile` and after that execute the maven build of the `pom.xml`:
+Like defined in the `docker-compose.yml`, [Docker Compose] will build a new Docker image of the `docker_image/Dockerfile` and after that, execute the maven build of the `pom.xml`:
 
 ```.yml
 version: '2'
