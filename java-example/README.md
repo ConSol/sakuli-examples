@@ -102,7 +102,7 @@ version: '2'
 
 services:
   sakuli_java_test:
-    build: docker_image
+    image: consol/sakuli-ubuntu-xfce-java
     environment:
     - TZ=Europe/Berlin
     volumes:
