@@ -2,7 +2,7 @@ version: '2'
 
 services:
   sakuli_java_test:
-    image: consol/sakuli-ubuntu-xfce-java:dev
+    image: consol/sakuli-ubuntu-xfce-java
     environment:
     - TZ=Europe/Berlin
     volumes:
@@ -12,7 +12,6 @@ services:
     ports:
     - 5911:5901
     - 6911:6901
-    command: "'mvn clean test -f /opt/maven/pom.xml'"
     # to keep container running and login via `docker exec -it javaexample_sakuli_java_test_1 bash`
     #command: "'--tail-log'"
 

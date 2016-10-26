@@ -106,13 +106,14 @@ services:
     environment:
     - TZ=Europe/Berlin
     volumes:
-    - .:/opt/maven/sakuli-java-example
+    - .:/opt/maven
     - data:/root/.m2
     network_mode: "bridge"
     ports:
     - 5911:5901
     - 6911:6901
-    command: ["mvn clean test -f /opt/maven/sakuli-java-example/pom.xml"]
+    # to keep container running and login via `docker exec -it javaexample_sakuli_java_test_1 bash`
+    #command: "'--tail-log'"
 
 volumes:
   data:
