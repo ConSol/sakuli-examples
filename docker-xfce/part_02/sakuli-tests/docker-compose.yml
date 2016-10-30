@@ -1,0 +1,27 @@
+# Run test in two separated environments: Ubuntu/Firefox and CentOS/Chrome
+
+sakuli_test_ubuntu_firefox:
+  image: consol/sakuli-ubuntu-xfce:dev
+  volumes:
+  - .:/opt/test
+  environment:
+  - TZ=Europe/Berlin
+  ports:
+  - 5911:5901
+  - 6911:6901
+  external_links:
+  - omd-nagios
+  command: ["run /opt/test/example_xfce -D testsuite.id=example_xfce_ubuntu_firefox"]
+
+sakuli_test_centos_chrome:
+  image: consol/sakuli-centos-xfce:dev
+  volumes:
+  - .:/opt/test
+  environment:
+  - TZ=Europe/Berlin
+  ports:
+  - 5912:5901
+  - 6912:6901
+  external_links:
+  - omd-nagios
+  command: ["run /opt/test/example_xfce -browser chrome -D testsuite.id=example_xfce_centos_chrome"]

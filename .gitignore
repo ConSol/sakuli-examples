@@ -7,6 +7,5 @@ install/*.zip
 .idea
 *.iml
 *.log
+*cache
 sakuli_inst
-sakuli.properties
-.gearman-cache
