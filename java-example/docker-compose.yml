@@ -2,7 +2,8 @@ version: '2'
 
 services:
   sakuli_java_test:
-    image: consol/sakuli-ubuntu-xfce-java
+    image: consol/sakuli-ubuntu-xfce-java:v1.0.2
+#    image: local/sakuli-centos-xfce-java:v1.0.2
     environment:
     - TZ=Europe/Berlin
     volumes:
