@@ -1,0 +1,7 @@
+---
+
+- name: Copy Nagios config file
+  copy:
+    src: sakuli_e2e_monitoring_nagios_objects.cfg
+    dest: /opt/omd/sites/demo/etc/nagios/conf.d/
+    owner: demo
