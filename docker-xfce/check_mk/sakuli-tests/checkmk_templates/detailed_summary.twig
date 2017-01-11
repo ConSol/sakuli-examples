@@ -1,7 +1,5 @@
 {# This template renders the detailed summary for the current test suite. #}
-{#{% if (testsuite.state.error) %}#}
-$whitespace${% include '
-detailed_summary_css_styles.twig' %}
+$whitespace${% include 'detailed_summary_css_styles.twig' %}
 <table style="border-collapse: collapse;">
     <tr valign="top">
         <td class="service{{ getOutputState(testsuite.state).name }}">
@@ -20,10 +18,10 @@ detailed_summary_css_styles.twig' %}
                 {{ testsuite.state.nagiosStateDescription }}:$whitespace$
                 {{ errorMessageCreator.exceptionMessageTestSuite(testsuite) }}.$whitespace$
             {% endif %}
-            {% if (empty(testsuite.stopDate)) %}
             (Last suite run:$whitespace$
-            {#xx#}
-            {#{% else %}#}
+            {% if (empty(testsuite.stopDate)) %}
+            xx
+            {% else %}
                 {{ testsuite.stopDate|date("dd.MM.YY HH:mm:ss") }}
             {% endif %})
             {% include 'exception_screenshot.twig' with { testDataEntity: testsuite } %}
@@ -49,4 +47,3 @@ detailed_summary_css_styles.twig' %}
         </tr>
     {% endfor %}
 </table>
-{#{% endif %}#}
