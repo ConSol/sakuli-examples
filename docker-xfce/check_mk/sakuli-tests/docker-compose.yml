@@ -1,7 +1,7 @@
 
 
 sakuli_test_centos_chrome:
-  image: local/sakuli-ubuntu-xfce:v1.1.0-SNAPSHOT-176_checkMK
+  image: consol/sakuli-ubuntu-xfce:v1.1.0-SNAPSHOT-176_checkMK
   volumes:
   - .:/opt/test
   - ./checkmk_output:/var/lib/check_mk_agent/spool
