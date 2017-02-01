@@ -14,7 +14,8 @@ sakuli_test_ubuntu_firefox:
   command: ["run /opt/test/example_xfce -D testsuite.id=example_xfce_ubuntu_firefox"]
 
 sakuli_test_centos_chrome:
-  image: consol/sakuli-centos-xfce:v1.0.2
+  image: local/sakuli-ubuntu-xfce
+#  image: consol/sakuli-centos-xfce:v1.0.2
   volumes:
   - .:/opt/test
   environment:
@@ -24,4 +25,4 @@ sakuli_test_centos_chrome:
   - 6912:6901
   external_links:
   - omd-nagios
-  command: ["run /opt/test/example_xfce -browser chrome -D testsuite.id=example_xfce_centos_chrome"]
+  command: run /opt/test/example_xfce -browser chrome -D testsuite.id=example_xfce_centos_chrome
