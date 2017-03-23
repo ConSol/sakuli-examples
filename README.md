@@ -8,7 +8,7 @@ This repository contains a bunch of example projects of the end-2-end testing an
     * Integrated in Maven build system
     
     
-* **[Tutorial: Sakuli & OMD](./omd-labs-sakulis/README.md)**
+* **[Tutorial: Sakuli & OMD](./omd-labs-sakuli/README.md)**
     * System under test: [Thruk Monitoring GUI](https://www.thruk.org/)
     * Runtime environment: Docker host with Docker Compose based configuration
     * Continuous end-2-end monitoring with [OMD Labs](https://labs.consol.de/omd/) (Nagios)
