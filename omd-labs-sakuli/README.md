@@ -23,7 +23,7 @@ Both containers, Sakuli and OMD, should start now:
     sakulie2e  | INFO  [2016-09-01 17:22:09.000] - sucessfully init sikuli-X screen!
     omdlabs    | changed: [localhost] => (item=MOD_GEARMAN on)
     sakulie2e  | INFO  [2016-09-01 17:22:10.959] - activate the spring context profiles '[GEARMAN]'
-    sakulie2e  | INFO  [2016-09-01 17:22:12.206] - read in properties from '/root/sakuli/sakuli-v1.1.0-SNAPSHOT/config/sakuli-default.properties'
+    sakulie2e  | INFO  [2016-09-01 17:22:12.206] - read in properties from '/headless/sakuli/sakuli-v1.1.0-SNAPSHOT/config/sakuli-default.properties'
     ...
 
 Nothing exciting so far. Let's connect to both containers to see what's happening.
@@ -55,13 +55,13 @@ sakuli:
     container_name: sakulie2e
     image: consol/sakuli-ubuntu-xfce:dev
     volumes:
-    - ./sakuli_docker_test:/root/sakuli_docker_test
-    - ./sahi_ff_profile_template:/root/sakuli/sahi/config/ff_profile_template
-    - ./sahi_certs:/root/sakuli/sahi/userdata/certs
+    - ./sakuli_docker_test:/headless/sakuli_docker_test
+    - ./sahi_ff_profile_template:/headless/sakuli/sahi/config/ff_profile_template
+    - ./sahi_certs:/headless/sakuli/sahi/userdata/certs
     ports:
     - "5901:5901"
     - "6901:6901"
-    command: "run /root/sakuli_docker_test -loop 1"
+    command: "run /headless/sakuli_docker_test -loop 1"
     links:
     - omdlabs:omd
 ```
@@ -74,7 +74,7 @@ This block
   * `./sahi_certs` - Keystore files (Sahi) for certificates signed by Sahi.
 * exposes port 5901/6901 
 * creates a link to the container omdlabs (alias: omd)
-* runs the "sakuli" starter inside the container with arguments `run /root/sakuli_docker_test -loop 1`
+* runs the "sakuli" starter inside the container with arguments `run /headless/sakuli_docker_test -loop 1`
 
 
 
@@ -86,7 +86,7 @@ omdlabs:
     container_name: omdlabs
     image: consol/sakuli-omd-labs-ubuntu
     volumes:
-    - ./omd_ansible_drop-in_role/:/root/ansible/dropin_role
+    - ./omd_ansible_dropin_role/:/root/ansible_dropin
     ports:
     - "8443:443"
 ```
@@ -95,7 +95,7 @@ This block
 
 * starts a container *omdlabs*, derived from the image *consol/sakuli-omd-labs-ubuntu*
 * mounts one folder into the container: 
-  * `./omd_ansible_drop-in_role/` - Ansible drop-in role
+  * `./omd_ansible_dropin_role/` - Ansible drop-in role
 * exposes port 8443
 
 
@@ -158,17 +158,17 @@ Now tell Docker to mount `sakuli_omd` into the container (instead of `sakuli_doc
    
     ...
     volumes:
-    # - ./sakuli_docker_test:/root/sakuli_docker_test
-    - ./sakuli_omd:/root/sakuli_docker_test
-    - ./sahi_ff_profile_template:/root/sakuli/sahi/config/ff_profile_template
-    - ./sahi_certs:/root/sakuli/sahi/userdata/certs
+    # - ./sakuli_docker_test:/headless/sakuli_docker_test
+    - ./sakuli_omd:/headless/sakuli_docker_test
+    - ./sahi_ff_profile_template:/headless/sakuli/sahi/config/ff_profile_template
+    - ./sahi_certs:/headless/sakuli/sahi/userdata/certs
     ...
 
  
 ### create new Nagios service 
 Create the Nagios service object and use the `testsuite.id` as `service_description`: 
 
-    vim omd_ansible_drop-in_role/files/sakuli_nagios_objects.cfg
+    vim omd_ansible_dropin_role/files/sakuli_nagios_objects.cfg
     ...
     define service {
       service_description            omd_thruk
@@ -197,8 +197,8 @@ Start the OMD container:
 Then start the Sakuli container with bash and start the Sakuli Dashboard - notice that we have also used the `--link` parameter to be able to talk to OMD from the Sakuli container: 
   
     docker run -it --rm \
-      -v $(pwd)/sahi_certs:/root/sakuli/sahi/userdata/certs \
-      -v $(pwd)/sahi_ff_profile_template:/root/sakuli/sahi/config/ff_profile_template \
+      -v $(pwd)/sahi_certs:/headless/sakuli/sahi/userdata/certs \
+      -v $(pwd)/sahi_ff_profile_template:/headless/sakuli/sahi/config/ff_profile_template \
       -p 6901:6901 \
       --link omdlabs:omd \
       consol/sakuli-ubuntu-xfce:dev bash [enter]    
@@ -214,7 +214,7 @@ As the picturs shows, in the container there are three important folders:
 
 Start the Sahi dashboard: 
 
-    root@e91f0c7a8935:~# cd /root/sakuli/sahi/userdata/bin [enter] 
+    root@e91f0c7a8935:~# cd /headless/sakuli/sahi/userdata/bin [enter] 
     root@e91f0c7a8935:# ./start_dashboard.sh [enter]
 
 The VNC session will now show the Sahi Dashboard, from where you can start Firefox. On the Sahi start page do the following steps:  
