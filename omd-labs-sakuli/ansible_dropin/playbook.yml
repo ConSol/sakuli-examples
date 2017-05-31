@@ -1,0 +1,10 @@
+---
+
+- name: execute ansible drop-in playbook
+  hosts: all
+  tasks:
+  - name: Copy Nagios config file
+    copy:
+      src: sakuli_nagios_objects.cfg
+      dest: /omd/sites/demo/etc/nagios/conf.d/sakuli_nagios_objects_demo.cfg
+      owner: demo

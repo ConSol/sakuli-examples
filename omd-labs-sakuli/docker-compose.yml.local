@@ -14,7 +14,7 @@ sakuli:
 
 omdlabs:
     container_name: omdlabs
-    image: consol/omd-labs-centos-sakuli
+    image: local/omd-labs-centos-sakuli:github-204-docker-cloud
     volumes:
     - ./ansible_dropin/:/root/ansible_dropin
     ports:
