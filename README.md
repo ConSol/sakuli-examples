@@ -1,5 +1,8 @@
 # Sakuli Examples
 This repository contains a bunch of example projects of the end-2-end testing and monitoring Framework **[Sakuli]**. 
+* **[First Steps Tutorial](./tutorials/first-steps/first-steps.md)**
+    * Learn how to write your first Sakuli tests.
+    * Learn how to use the Sahi controller and recorder.
 
 * **[Java end-2-end testing](./java-example/README.md)**
     * System under test: [Citrus Integrationtesting Framework](http://www.citrusframework.org/)
