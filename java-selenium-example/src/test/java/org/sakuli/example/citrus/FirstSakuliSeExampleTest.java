@@ -29,7 +29,6 @@ public class FirstSakuliSeExampleTest extends AbstractSakuliSeTest {
     private static int hSec = 2;
 
     @Test
-    @Ignore
     @SakuliTestCase(additionalImagePaths = "citrus_pics")
     public void testLogos() throws Exception {
         searchHeading();
@@ -38,7 +37,6 @@ public class FirstSakuliSeExampleTest extends AbstractSakuliSeTest {
     }
 
     @Test
-    @Ignore
     @SakuliTestCase
     public void testCitrusHtmlContent() throws Exception {
         testCitrusContent("HTML");
@@ -81,10 +79,10 @@ public class FirstSakuliSeExampleTest extends AbstractSakuliSeTest {
     public void testCitrusContent(String dest) throws Exception {
         searchHeading();
 
-        WebElement documentationLink = driver.findElement(By.partialLinkText("Documentation"));
-        dsl.highlightElement(documentationLink);
-        assertTrue(documentationLink.isDisplayed());
-        documentationLink.click();
+        WebElement docuLink = driver.findElement(By.partialLinkText("Documentation"));
+        dsl.highlightElement(docuLink);
+        assertTrue(docuLink.isDisplayed());
+        docuLink.click();
 
         WebElement userGuideLink = driver.findElement(By.partialLinkText("User Guide"));
         dsl.highlightElement(userGuideLink);

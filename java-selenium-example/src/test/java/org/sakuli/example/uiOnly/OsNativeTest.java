@@ -1,11 +1,15 @@
 package org.sakuli.example.uiOnly;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.sakuli.actions.environment.Application;
 import org.sakuli.actions.environment.Environment;
+import org.sakuli.actions.logging.Logger;
 import org.sakuli.actions.screenbased.Region;
+import org.sakuli.selenium.actions.testcase.SeTestCaseAction;
 import org.sakuli.selenium.testng.SakuliSeTest;
 import org.sakuli.selenium.testng.SakuliTestCase;
+import org.sakuli.utils.ResourceHelper;
 import org.sikuli.script.Key;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -21,12 +25,14 @@ public class OsNativeTest {
     private Application gedit;
     private Region screen;
     private Environment env;
+    private SeTestCaseAction tc;
 
     @BeforeMethod
     public void setUp() throws Exception {
         gedit = new Application("gedit");
         screen = new Region();
         env = new Environment();
+        tc = new SeTestCaseAction();
     }
 
     @AfterMethod
@@ -36,15 +42,23 @@ public class OsNativeTest {
         }
     }
 
+    private void checkEnvironment() throws Exception {
+        if (StringUtils.isNotBlank(System.getenv("VNC_PORT"))) {
+            Logger.logInfo("----- load XFCE based screenshots");
+            tc.addImagePaths(ResourceHelper.getClasspathResource(OsNativeTest.class, "xfce-env", "image folder for XFCE env not found"));
+        }
+    }
+
     @Test
-    @SakuliTestCase(additionalImagePaths = "/common_pics")
+    @SakuliTestCase(warningTime = 50, criticalTime = 60)
     public void testNativeFileContentAccessesOverUI() throws Exception {
+        checkEnvironment();
         gedit.open();
 
         // shows fluent API and how sub regions can be used
-        final Region otherDocument = screen.find("gedit").highlight()
+        final Region otherDocument = screen.waitForImage("gedit", 5).highlight()
                 .click()
-                .below(200).highlight()
+                .below(200).setW(300).highlight()
                 .waitForImage("search", 20)
                 .highlight()
                 .click()
@@ -59,8 +73,8 @@ public class OsNativeTest {
 
         //open readme file
         screen.waitForImage("cancel_button.png", 5).highlight()
-                .left(30).highlight().click()
-                .type("Readme").type(Key.ENTER)
+                .left(50).highlight().click()
+                .type("README").type(Key.ENTER)
                 .sleep(2);
         screen.find("gedit").highlight();
 
@@ -70,5 +84,7 @@ public class OsNativeTest {
         //assert the readme content
         System.out.println(clipboard);
         Assert.assertTrue(clipboard.contains("Sakuli Selenium"));
+//      env.sleep(9999999);
+
     }
 }
