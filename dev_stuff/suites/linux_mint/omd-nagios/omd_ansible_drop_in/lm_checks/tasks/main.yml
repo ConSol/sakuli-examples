@@ -1,0 +1,11 @@
+---
+
+- name: set timezone
+  shell: echo 'TZ=Europe/Berlin' >> /opt/omd/sites/demo/etc/environment
+- name: Copy Nagios config file
+  copy:
+    src: ./
+    dest: /opt/omd/sites/demo/etc/nagios/conf.d/
+    owner: demo
+- name: Restart OMD
+  shell: omd restart "{{ SITENAME }}"
