@@ -1,19 +1,25 @@
 # Run test in two separated environments: Ubuntu/Firefox and CentOS/Chrome
 
 sakuli_test_ubuntu_firefox:
-  image: consol/sakuli-ubuntu-xfce
+  image: consol/sakuli-ubuntu-xfce:v1.1.0-beta
   volumes:
   - ./example_xfce:/opt/test
   ports:
   - 5911:5901
   - 6911:6901
-  command: ["run /opt/test"]
+  # you can also use your user id
+  # user: '1000'
+  user: '0'
+  command: run /opt/test
 
 sakuli_test_centos_chrome:
-  image: consol/sakuli-centos-xfce
+  image: consol/sakuli-centos-xfce:v1.1.0-beta
   volumes:
   - ./example_xfce:/opt/test
   ports:
   - 5912:5901
   - 6912:6901
-  command: ["run /opt/test -browser chrome"]
+  # you can also use your user id
+  # user: '1000'
+  user: '0'
+  command: run /opt/test -browser chrome
