@@ -1,13 +1,23 @@
 # Sakuli Examples
-This repository contains a bunch of example projects of the end-2-end testing and monitoring Framework **[Sakuli]**. 
+This repository contains a bunch of example projects of the end-2-end testing and monitoring Framework **[Sakuli]**. By default, the examples use the JavaScript based testdefinition, see [Sakuli Documentation - Execution Types](http://consol.github.io/sakuli/v1.1.0-SNAPSHOT/index.html#execution-types).
+
+
 * **[First Steps Tutorial](./tutorials/first-steps/first-steps.md)**
     * Learn how to write your first Sakuli tests.
     * Learn how to use the Sahi controller and recorder.
 
-* **[Java end-2-end testing](./java-example/README.md)**
+* **[Java Setup: End-2-End Testing with Sakuli](./java-example/README.md)**
     * System under test: [Citrus Integrationtesting Framework](http://www.citrusframework.org/)
-    * Runtime environment: local develop machine ***or*** Docker host with Docker Compose based configuration
-    * Java unit test with TestNG
+    * Runtime environment: local developer machine ***or*** Docker host with Docker Compose based configuration
+    * Java unit test with [TestNG](http://testng.org)
+    * Integrated in Maven build system
+    
+   
+* **[Java Setup: End-2-End Testing with Selenium & Sakuli (under developement)](./java-selenium-example/README.md)**
+    * System under test: [Citrus Integrationtesting Framework](http://www.citrusframework.org/)
+    * Runtime environment: local developer machine ***or*** Docker host with Docker Compose based configuration
+    * Java unit test with [TestNG](http://testng.org)
+    * Web test actions implemented with [Selenium](https://www.selenium.org) 
     * Integrated in Maven build system
     
     
