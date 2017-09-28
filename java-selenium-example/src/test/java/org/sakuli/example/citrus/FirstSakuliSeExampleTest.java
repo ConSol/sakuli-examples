@@ -42,10 +42,14 @@ public class FirstSakuliSeExampleTest extends AbstractSakuliSeTest {
         testCitrusContent("HTML");
 
         //VALIDATE HTML content
-        WebElement heading = driver.findElement(By.cssSelector("#citrus-framework--reference-documentation-"));
+        WebElement heading = driver.findElement(By.tagName("h1"));
         dsl.highlightElement(heading);
-        assertEquals(heading.getText(), "Citrus Framework - Reference Documentation");
+        assertEquals(heading.getText(), "Citrus");
         assertTrue(heading.isDisplayed());
+        WebElement author = driver.findElement(By.className("author"));
+        dsl.highlightElement(author);
+        assertEquals(author.getText(), "Christoph Deppisch");
+        assertTrue(author.isDisplayed());
     }
 
     @Test
@@ -55,7 +59,7 @@ public class FirstSakuliSeExampleTest extends AbstractSakuliSeTest {
         screen.find("reload_button.png").highlight();
 
         scroll( //search for logo
-                () -> screen.exists("citrus_fruit.png", 1),
+                () -> screen.exists("pdf_citrus_title.png", 1),
                 //scroll action
                 () -> env.type(Key.DOWN).type(Key.DOWN).type(Key.DOWN).type(Key.DOWN),
                 //times to try
@@ -79,7 +83,7 @@ public class FirstSakuliSeExampleTest extends AbstractSakuliSeTest {
     public void testCitrusContent(String dest) throws Exception {
         searchHeading();
 
-        WebElement docuLink = driver.findElement(By.partialLinkText("Documentation"));
+        WebElement docuLink = driver.findElement(By.partialLinkText("DOCUMENTATION"));
         dsl.highlightElement(docuLink);
         assertTrue(docuLink.isDisplayed());
         docuLink.click();
