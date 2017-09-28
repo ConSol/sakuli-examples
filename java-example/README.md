@@ -91,6 +91,8 @@ In this example, we want to check if the UI renders the Citrus page correctly:
 
 ## Docker environment
 
+**General note:** If you get the exception `java.nio.file.AccessDeniedException: /opt/test/example_xfce/_logs` please ensure that you local files have the correct file permissions. If you not sure you can run `chmod a+rw -R .` or change `user: 1000` to your own user id (execute `id -u`).
+
     git clone git@github.com:ConSol/sakuli-examples.git [enter]
     cd sakuli-examples/java-example [enter]
     docker-compose up [enter]

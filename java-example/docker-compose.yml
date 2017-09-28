@@ -2,14 +2,14 @@ version: '2'
 
 services:
   sakuli_java_test:
-    image: consol/sakuli-ubuntu-xfce-java:v1.0.2
-#    image: local/sakuli-centos-xfce-java:v1.0.2
+    image: consol/sakuli-ubuntu-xfce-java:v1.1.0-beta
     environment:
     - TZ=Europe/Berlin
     volumes:
     - .:/opt/maven
     - data:/root/.m2
     network_mode: "bridge"
+    user: '1000'
     ports:
     - 5911:5901
     - 6911:6901
