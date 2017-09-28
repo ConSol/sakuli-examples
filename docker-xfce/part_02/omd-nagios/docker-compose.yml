@@ -1,6 +1,7 @@
 omd-nagios:
     container_name: omd-nagios
-    image: consol/sakuli-omd-labs-ubuntu
+#    TODO TS: check if still working with grafana
+    image: consol/omd-labs-centos-sakuli:grafana
     #runtime data backup
 #    image: toschneck/omd-nagios-demo:jug-saxony-day
     ports:
@@ -10,4 +11,4 @@ omd-nagios:
     - TZ=Europe/Berlin
     volumes:
     - /etc/localtime:/etc/localtime
-    - ./omd_ansible_drop-in_role/:/root/ansible/dropin_role
+    - ./ansible_dropin/:/root/ansible_dropin

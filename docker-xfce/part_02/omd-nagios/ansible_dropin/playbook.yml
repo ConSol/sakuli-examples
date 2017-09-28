@@ -1,0 +1,8 @@
+---
+
+- name: "Configure Sakuli E2E checks for Site: {{ SITENAME }}"
+  hosts: all
+  environment:
+    OMD_ROOT: "/opt/omd/sites/{{ SITENAME }}"
+  roles:
+    - xfce_checks

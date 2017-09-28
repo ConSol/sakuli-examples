@@ -17,7 +17,7 @@
  */
 
 _dynamicInclude($includeFolder);
-var testCase = new TestCase(40, 50);
+var testCase = new TestCase(40, 60);
 var env = new Environment();
 var screen = new Region();
 var appCalc = new Application("/usr/bin/gnome-calculator");
@@ -26,7 +26,7 @@ var appGedit = new Application("/usr/bin/gedit");
 function checkCentOS() {
     var dist = env.runCommand('cat /etc/os-release').getOutput();
     if (dist.match(/NAME=.*CentOS.*/)) {
-        Logger.logInfo('Detected distribution: CentOS  >> override some image patterns');
+        Logger.logInfo('Detected distribution: CentOS  >> overwrite some image patterns');
         testCase.addImagePaths("centos");
     }
 }
@@ -59,7 +59,7 @@ try {
 } catch (e) {
     testCase.handleException(e);
 } finally {
-    //env.sleep(99999999);
+    // env.sleep(99999999);
     appCalc.close(true); //silent
     appGedit.kill(true);  //silent, without exit prompt
     testCase.saveResult();

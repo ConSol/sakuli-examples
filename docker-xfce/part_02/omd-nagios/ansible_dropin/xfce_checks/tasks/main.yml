@@ -1,5 +1,7 @@
 ---
 
+- name: set timezone
+  shell: echo 'TZ=Europe/Berlin' >> /opt/omd/sites/demo/etc/environment
 - name: Copy Nagios config file
   copy:
     src: sakuli_e2e_monitoring_nagios_objects.cfg
