@@ -12,23 +12,17 @@ function checkDefaults(){
 checkDefaults
 COMPOSEFILE="$WORKSPACE/omd-nagios/docker-compose.yml"
 
-if [[ $1 =~ restart ]]; then
-    docker-compose -f $COMPOSEFILE up -d
-    exit 0
-fi
 if [[ $1 =~ stop ]]; then
     docker-compose -f $COMPOSEFILE stop
     exit 0
 fi
 
 docker-compose -f $COMPOSEFILE kill || echo "kill running containers"
-docker-compose -f $COMPOSEFILE rm -f || echo "delete stoped containers"
 if [[ $1 =~ kill ]]; then
     exit 0
 fi
 ### build an startup application and  start the wait container to block until the web-applications are reachable
-docker-compose -f $COMPOSEFILE build \
-    && docker-compose -f $COMPOSEFILE up -d \
+docker-compose -f $COMPOSEFILE up --force-recreate -d \
     && exit 0
 
 echo "unexpected error starting OMD-Nagios containers from '$COMPOSEFILE'"
