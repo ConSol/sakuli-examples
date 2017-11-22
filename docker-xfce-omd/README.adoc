@@ -75,9 +75,9 @@ try {
 }
 ----
 
-The method `checkCentOS` just makes a small native Linux command to define in witch operating system the test will be executed. If the operating system is CentOS Sakuli will load the screenshot images from the folder link:part_01/example_xfce/case1/centos[`part_01/example_xfce/case1/centos`] and overwrite the default images defined inlink:part_01/example_xfce/case1[`part_01/example_xfce/case1`].
+The method `checkCentOS` just makes a small native Linux command to define in witch operating system the test will be executed. If the operating system is CentOS Sakuli will load the screenshot images from the folder link:part_01/example_xfce/case1/centos[`part_01/example_xfce/case1/centos`] and overwrite the default images defined in link:part_01/example_xfce/case1[`part_01/example_xfce/case1`].
 
-There are some http://consol.github.io/sakuli/latest/index.html#TestCase.endOfStep[`testCase.endOfStep("<step_name>", <step_waring_time>)`] function calls. There you define that all statements above belong to one teststep. The integer value for `<step_warning_time>` defines what's the maximum time in seconds for executing the above test. If the step breaks the threshold, Sakuli will end in the the state `warning in step`. In <<part2>>, we will see the values represented in a grafana graph.
+There are some http://consol.github.io/sakuli/latest/index.html#TestCase.endOfStep[`testCase.endOfStep("<step_name>", <step_waring_time>)`] function calls. There you define that all statements above belong to one test step. The integer value for `<step_warning_time>` defines what's the maximum time in seconds for executing the above test. If the step breaks the threshold, Sakuli will end in the the state `warning in step`. In <<part2>>, we will see the values represented in a grafana graph.
 
 To define a warning time for the test case, the http://consol.github.io/sakuli/latest/index.html#TestCase[`TestCase`] object have been used:
 
@@ -86,7 +86,7 @@ To define a warning time for the test case, the http://consol.github.io/sakuli/l
 var testCase = new TestCase(40, 60);
 ----
 
-The second threshold of `60` seconds, define the critical time. It's also possible define a global waring and critical times for the whole test suite in the file link:part_01/example_xfce/testsuite.properties[`/part_01/example_xfce/testsuite.properties`], if you have more testcases. After all you get this datamodel:
+The second threshold of `60` seconds, define the critical time. It's also possible define a global waring and critical times for the whole test suite in the file link:part_01/example_xfce/testsuite.properties[`/part_01/example_xfce/testsuite.properties`], if you have more testcases. After all you get this data model:
 
 [source,bash]
 ----
@@ -147,7 +147,7 @@ part01_sakuli_test_centos_chrome_1    /dockerstartup/startup.sh  ...   Exit 0
 part01_sakuli_test_ubuntu_firefox_1   /dockerstartup/startup.sh  ...   Exit 0
 ----
 
-To evaluate if all went fine, just verify the exit code is not `0` or the logs at link:part_01/example_xfce/_logs/_sakuli.log[`part_01/example_xfce/_logs/_sakuli.log`]. Another possibility is to look at the docker logs e.g.
+To evaluate if all went fine, just verify the exit code is not `0` or the logs at `part_01/example_xfce/_logs/_sakuli.log`. Another possibility is to look at the docker logs e.g.
 
 [source,bash]
 ----
