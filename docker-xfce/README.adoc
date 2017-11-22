@@ -6,7 +6,7 @@
 * Testing HTML content
 * Testing native UI content
 * Setting up a monitoring with:
-* Graphs about the performance times
+* Grafana graphs about the performance times (end user perspective)
 * Alerts on errors with screenshots
 * Continuous execution of the test suite in a loop
 
@@ -21,7 +21,7 @@ First we wan't to create a simple Sakuli test and execute in two different conta
 .Web testing component: Sahi starting page
 image:.pics/web_content_testing.png[Web testing component: Sahi starting page]
 
-.Native UI component: Calculator + gedit
+.Native UI component: Gnome Calculator + gedit
 image:.pics/ui_content_testing.png[Native UI component: Calculator  gedit]
 
 The implementation of the test case is very simple, you can just mix web and native testing methods. Take a look at the file: link:part_01/example_xfce/case1/sakuli_demo.js[`part_01/example_xfce/case1/sakuli_demo.js`].
@@ -77,7 +77,7 @@ try {
 }
 ----
 
-The method `checkCentOS` just makes a small native Linux command to define in witch operating system the test will be executed. If the OS is CentOS Sakuli will the screenshot images from the folder link:part_01/example_xfce/case1/centos[`part_01/example_xfce/case1/centos`] and overwrite the default images defined inlink:part_01/example_xfce/case1[`part_01/example_xfce/case1`].
+The method `checkCentOS` just makes a small native Linux command to define in witch operating system the test will be executed. If the operating system is CentOS Sakuli will load the screenshot images from the folder link:part_01/example_xfce/case1/centos[`part_01/example_xfce/case1/centos`] and overwrite the default images defined inlink:part_01/example_xfce/case1[`part_01/example_xfce/case1`].
 
 There are some http://consol.github.io/sakuli/latest/index.html#TestCase.endOfStep[`testCase.endOfStep("<step_name>", <step_waring_time>)`] function calls. There you define that all statements above belong to one teststep. The integer value for `<step_warning_time>` defines what's the maximum time in seconds for executing the above test. If the step breaks the threshold, Sakuli will end in the the state `warning in step`. In <<part2>>, we will see the values represented in a grafana graph.
 
@@ -216,7 +216,6 @@ SAKULI_RETURN_VAL: 0
 
 [[part2]]
 == Part 2
-//TODO TS read for correction
 
 In the second part of the tutorial, we will send the gathered results to a containerized https://labs.consol.de/de/omd/index.html[OMD Labs] monitoring server.
 
@@ -258,7 +257,7 @@ define host {
 
 === Add service config to OMD
 
-To add the above service configuration to the OMD, we will use the predefined Docker image `consol/omd-labs-centos-sakuli:grafana`, add the sources under `part_02/omd-nagios/ansible_dropin` and call the http://docs.ansible.com/ansible/latest/playbooks.html[Ansible Playbook] link:part_02/omd-nagios/ansible_dropin/xfce_checks[`part_02/omd-nagios/ansible_dropin/xfce_checks/`]. The `main.yml` defines, how Ansible set the timezone, copy the service configuration and configures the http://consol.github.io/sakuli/latest/index.html#_using_aes_encryption_optional[mod-gearman encryption] password:
+To add the above service configuration to the OMD, we will use the predefined Docker image `consol/omd-labs-centos-sakuli:grafana`, add the sources to the image and call the http://docs.ansible.com/ansible/latest/playbooks.html[Ansible Playbook] under link:part_02/omd-nagios/ansible_dropin/xfce_checks[`part_02/omd-nagios/ansible_dropin/xfce_checks/`]. The `main.yml` defines, how Ansible set the timezone, copy the service configuration and configures the http://consol.github.io/sakuli/latest/index.html#_using_aes_encryption_optional[mod-gearman encryption] password:
 
 .link:part_02/omd-nagios/ansible_dropin/xfce_checks/tasks/main.yml[`part_02/omd-nagios/ansible_dropin/xfce_checks/tasks/main.yml`]
 [source,yaml]
@@ -280,7 +279,7 @@ To add the above service configuration to the OMD, we will use the predefined Do
     - mod-gearman/*
 ----
 
-To execute the Ansible playbook at the startup, we mount the folder `ansible_dropin` into to omd container. This is done by the following [Docker Compose] file:
+To execute the Ansible playbook at the startup, we mount the folder `ansible_dropin` into `root/ansible_dropin` at the omd container. This is done by the following [Docker Compose] file:
 
 .link:part_02/omd-nagios/docker-compose.yml[`part_02/omd-nagios/docker-compose.yml`]
 [source,yaml]
@@ -327,20 +326,23 @@ omd-nagios    | --------------------------------------
 omd-nagios    | AH00558: httpd: Could not reliably determine the server's fully qualified domain name, using 192.168.199.2. Set the 'ServerName' directive globally to suppress this message
 ----
 
-TIP: To shortcut some sepcial docker-compose commands, we can execute the script link:part_02/omd-nagios/deploy_omd.sh[`part_02/omd-nagios/deploy_omd.sh`] (ensures that containers remove and started fresh)
+TIP: To shortcut some special docker-compose commands, you can execute the script link:part_02/omd-nagios/deploy_omd.sh[`part_02/omd-nagios/deploy_omd.sh`] (ensures that containers will be removed and started from scratch)
 
-After the sucessfull startup of the OMD we can now open the OMD Demo page and see two services `example_xfce_centos_chrome` and `example_xfce_centos_chrome`:
+After the successful startup of the OMD we can now open the OMD Demo page and see two services `example_xfce_centos_chrome` and `example_xfce_centos_chrome`:
 
-1. Open https://localhost:8043/demo
-2. Accept the securtiy warning about the seflsigned certificate
-3. Login to OMD with user `omdadmin` and password `omd`
+1) Open https://localhost:8043/demo
+2) Accept the security warning about the self-signed certificate
+3) Login to OMD with user `omdadmin` and password `omd`
+
 image:.pics/omd_login.png[omd login]
-4. Click `Services` to get overview page
+
+4) Click `Services` to get overview page
+
 image:.pics/omd_services.png[omd services]
 
 === Configure Sakuli tests
 
-After OMD is ready to receive results from Sakuli as passiv check, we need to configure the connection in our Sakuli tests:
+After OMD is ready to receive results from Sakuli as passive check, we need to configure the connection in our Sakuli tests to froward the test results to OMD:
 
 1) Add the created OMD network `omd-nagios` as external link to the `docker-compose.yml` of each sakuli test definition, so Sakuli can send data to the OMD server:
 
@@ -398,14 +400,16 @@ To get real monitoring runtime data we need to setup a continuous loop which exe
 
 NOTE: To stop the loop press `CTRL + C`.
 
-After a few runs we should be able the the some graphs. Therefore click on the *Extra Action* button and a grafana dashboard should appear.
+After a few runs we should be able the the some graphs. Therefore click on the *Extra Action* button and a Grafana dashboard should appear.
 image:.pics/omd_extra_action.png[omd extra action]
 To get better view of the latest results choose `Last 15 minutes` as time interval.
 image:.pics/omd_graph_ok.png[omd graph ok]
 
+The red/yellow lines are representing the critical/warning times from the suite respectively the test case definition of <<part1>>. If one of the threshold is exceeded the service will change state to `WARNING` or `CRITICAL` and trigger a notification. To enable E-Mail notification, see https://labs.consol.de/de/omd/notifications.html[OMD Notifications].
+
 === Simulate an Error
 
-To get a feeling how Sakuli reacts on errors we will change the testcase definition `sakuli_demo.js` to a not present link validation:
+To get a feeling how Sakuli reacts on errors we will modify the testcase definition `sakuli_demo.js` to a not present link validation and force an error through this:
 
 .link:part_02/sakuli-tests/example_xfce/case1/sakuli_demo.js[`part_02/sakuli-tests/example_xfce/case1/sakuli_demo.js`]
 [soruce,js]
@@ -421,20 +425,24 @@ try {
     ...
 ----
 
-On the next test run in the loop the OMD sever will change the state to `CRITICAL` and shows the error message: `[CRIT] Sakuli suite "example_xfce_centos_chrome" (25.23s) EXCEPTION: 'CASE "case1": STEP "Test_Sahi_landing_page": _highlight(_link("XXXX_Logs")): TypeError:`.
+On the next test run in the loop the OMD sever will change the state to `CRITICAL` and shows the error message:
 
-To get a idea about what happens, Sakuli automatically creates an screenshot on every error and append it to the service result:
+    [CRIT] Sakuli suite "example_xfce_centos_chrome" (25.23s) EXCEPTION: 'CASE "case1": STEP "Test_Sahi_landing_page": _highlight(_link("XXXX_Logs")): TypeError:
+
+To get a idea about what happens, Sakuli automatically creates a screenshot of every error and append it to the service result:
 image:.pics/omd_error.png[omd error]
 
-With the update grafana template it is even possible to see the screenshot directly in the grafana praph, if you hoover over the purple annotation:
+With the updated Grafana template (version 1.1.0) it is even possible to see the screenshot directly in the Grafana graph, if you hoover over the purple annotation:
 image:.pics/omd_error_grafana.png[omd error grafana]
 
 
 == Conclusion
 
-The above tutorial shows how easy it is to setup a fully functional end-to-end monitoring with Sakuli, OMD and Docker. After all is set up, the example test cases can used as template for your own e2e tests and monitoring environment. After the release `1.1.0` it's also possible to run the whole setup in container management software like https://kubernetes.io[Kubernetes] or https://openshift.io/[OpenShift]. To get more information about this or about how to write your own e2e tests take a look to our official http://consol.github.io/sakuli/latest/index.html[Sakuli Documentation].
+The above tutorial shows how easy it is to setup a fully functional end-to-end monitoring with Sakuli, OMD and Docker. Sometime this use case is also called "application monitoring", but however Sakuli will no detect if an application is down, has functional errors or even have a performance issue.
 
-On questions feel free to contact us through `sakuli@consol.de` or open an issue at Github: https://github.com/ConSol/sakuli-examples/issues/new[github.com/sakuli-examples/issues].
+After all is set up, the example test cases can now be used as template for your own e2e tests and monitoring environment. With the release `1.1.0` it's also possible to run the whole setup in container management solutions like https://kubernetes.io[Kubernetes] or https://openshift.io/[OpenShift]. To get more information about this or about how to write your own e2e tests take a look to our official http://consol.github.io/sakuli/latest/index.html[Sakuli Documentation].
+
+If you need help or you have some further questions feel free to contact us through `sakuli@consol.de` or open an issue at Github: https://github.com/ConSol/sakuli-examples/issues/new[github.com/sakuli-examples/issues].
 
 
 
