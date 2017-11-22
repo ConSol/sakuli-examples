@@ -13,8 +13,6 @@
 [[part1]]
 == Part 1
 
-NOTE: If you get the exception `java.nio.file.AccessDeniedException: /opt/test/example_xfce/_logs` please ensure that you local files have the correct file permissions. If you not sure you can run `chmod a+rw -R .` or change `user: 1000` to your own user id (execute `id -u`).
-
 === Testdefinition
 First we wan't to create a simple Sakuli test and execute in two different containerized UIs. The test should first validate the starting page of the sahi web testing component. Afterwards it should open the _Gnome Calculator_ and calculate `525 + 100` and validate the Result of `625`. At least the test should open _gedit_ and paste there a message for us that all went fine.
 
@@ -25,7 +23,7 @@ image:.pics/web_content_testing.png[Web testing component: Sahi starting page]
 image:.pics/ui_content_testing.png[Native UI component: Calculator  gedit]
 
 The implementation of the test case is very simple, you can just mix web and native testing methods. Take a look at the file: link:part_01/example_xfce/case1/sakuli_demo.js[`part_01/example_xfce/case1/sakuli_demo.js`].
-[source, js]
+[source,js]
 ----
 _dynamicInclude($includeFolder);
 var testCase = new TestCase(40, 60);
@@ -83,14 +81,14 @@ There are some http://consol.github.io/sakuli/latest/index.html#TestCase.endOfSt
 
 To define a warning time for the test case, the http://consol.github.io/sakuli/latest/index.html#TestCase[`TestCase`] object have been used:
 
-[source]
+[source,js]
 ----
 var testCase = new TestCase(40, 60);
 ----
 
 The second threshold of `60` seconds, define the critical time. It's also possible define a global waring and critical times for the whole test suite in the file link:part_01/example_xfce/testsuite.properties[`/part_01/example_xfce/testsuite.properties`], if you have more testcases. After all you get this datamodel:
 
-[source]
+[source,bash]
 ----
 TestSuite: example_xfce, warning time: 50, critical time: 70
 |---- TestCase: case1, warning time: 40, critical time: 60
@@ -103,7 +101,7 @@ TestSuite: example_xfce, warning time: 50, critical time: 70
 
 Now we can configure the runtime environment there we use the Docker image `consol/sakuli-ubuntu-xfce` and for the second environment `consol/sakuli-centos-xfce` container where we mount in our test case definition. To make it easy to start the container, we used https://docs.docker.com/compose/[Docker Compose] to define the setup in the file link:part_01/docker-compose.yml[`part_01/docker-compose.yml`]:
 
-[source, yaml]
+[source,yaml]
 ----
 sakuli_test_ubuntu_firefox:
   image: consol/sakuli-ubuntu-xfce:dev
@@ -126,7 +124,7 @@ sakuli_test_centos_chrome:
   command: run /opt/test/example_xfce -browser chrome
 ----
 
-NOTE: The user id `user: '1000'` must match to the user id of your linux host system, to be able to write in the mounted volumes. Alternatively you can use the root user `user: '0'`.
+NOTE: If you get the exception `java.nio.file.AccessDeniedException: /opt/test/example_xfce/_logs` please ensure that you local files have the correct file permissions. If you not sure you can run `chmod a+rw -R .` or change `user: 1000` to your own user id (execute `id -u`). Alternatively you can use the root user `user: '0'`.
 
 To start the both testcases in parallel simply execute:
 
@@ -140,18 +138,18 @@ image:.pics/vnc_overview.gif[VNC overview page docker containers]
 
 After the execution will find two finished containers:
 
-[source, bash]
+[source,bash]
 ----
 $ docker-compose ps
                Name                              Command               State    Ports
----------------------------------------------------------------------------------
+ ---------------------------------------------------------------------------------
 part01_sakuli_test_centos_chrome_1    /dockerstartup/startup.sh  ...   Exit 0
 part01_sakuli_test_ubuntu_firefox_1   /dockerstartup/startup.sh  ...   Exit 0
 ----
 
 To evaluate if all went fine, just verify the exit code is not `0` or the logs at link:part_01/example_xfce/_logs/_sakuli.log[`part_01/example_xfce/_logs/_sakuli.log`]. Another possibility is to look at the docker logs e.g.
 
-[source]
+[source,bash]
 ----
 $ docker logs part01_sakuli_test_ubuntu_firefox_1
 ....
@@ -224,7 +222,7 @@ In the second part of the tutorial, we will send the gathered results to a conta
 First we want to create a service configuration for the created sakuli tests. Therefore we created the file link:part_02/omd-nagios/ansible_dropin/xfce_checks/files/sakuli_e2e_monitoring_nagios_objects.cfg[`part_02/omd-nagios/ansible_dropin/xfce_checks/files/sakuli_e2e_monitoring_nagios_objects.cfg`]. For details see http://consol.github.io/sakuli/latest/index.html#omd-gearman[Sakuli Documentation - OMD Gearman Forwarder].
 
 .sakuli_e2e_monitoring_nagios_objects.cfg
-[source, cfg]
+[source,cfg]
 ----
 define service {
     name tpl_s_sakuli_xfce_template
@@ -412,7 +410,7 @@ The red/yellow lines are representing the critical/warning times from the suite 
 To get a feeling how Sakuli reacts on errors we will modify the testcase definition `sakuli_demo.js` to a not present link validation and force an error through this:
 
 .link:part_02/sakuli-tests/example_xfce/case1/sakuli_demo.js[`part_02/sakuli-tests/example_xfce/case1/sakuli_demo.js`]
-[soruce,js]
+[source,js]
 ----
 ...
 try {
@@ -427,7 +425,10 @@ try {
 
 On the next test run in the loop the OMD sever will change the state to `CRITICAL` and shows the error message:
 
-    [CRIT] Sakuli suite "example_xfce_centos_chrome" (25.23s) EXCEPTION: 'CASE "case1": STEP "Test_Sahi_landing_page": _highlight(_link("XXXX_Logs")): TypeError:
+[source,bash]
+----
+[CRIT] Sakuli suite "example_xfce_centos_chrome" (25.23s) EXCEPTION: 'CASE "case1": STEP "Test_Sahi_landing_page": _highlight(_link("XXXX_Logs")): TypeError:
+----
 
 To get a idea about what happens, Sakuli automatically creates a screenshot of every error and append it to the service result:
 image:.pics/omd_error.png[omd error]
