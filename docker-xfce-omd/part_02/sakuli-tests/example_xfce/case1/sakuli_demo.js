@@ -34,7 +34,8 @@ function checkCentOS() {
 try {
     checkCentOS();
     _highlight(_link(/SSL M.*/));
-    _highlight(_link("Logs"));
+    // remove:  _highlight(_link("Logs"));
+    _highlight(_link("XXXX_Logs"));
     _highlight(_link("Online Documentation"));
     _highlight(_link("Test Pages"));
     _highlight(_link("Sample Application"));

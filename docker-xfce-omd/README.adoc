@@ -1,13 +1,13 @@
-= Sakuli Example: E2E application monitoring in Docker based Xfce UI
+= Sakuli Tutorial: Docker based E2E application monitoring with Xfce UI and OMD Labs
 
 == Objectives
 
 * Implement a complete containerized end-to-end monitoring environment
 * Testing HTML content
 * Testing native UI content
-* Setting up a monitoring with:
-* Grafana graphs about the performance times (end user perspective)
-* Alerts on errors with screenshots
+* Setting up a monitoring with https://labs.consol.de/de/omd/index.html[OMD Labs]:
+** Grafana graphs about the performance times (end user perspective)
+** Alerts on errors with screenshots
 * Continuous execution of the test suite in a loop
 
 [[part1]]
@@ -433,14 +433,14 @@ To get a idea about what happens, Sakuli automatically creates a screenshot of e
 image:.pics/omd_error.png[omd error]
 
 With the updated Grafana template (version 1.1.0) it is even possible to see the screenshot directly in the Grafana graph, if you hoover over the purple annotation:
-image:.pics/omd_error_grafana.png[omd error grafana]
+image:.pics/omd_error_grafana.gif[omd error grafana]
 
 
 == Conclusion
 
 The above tutorial shows how easy it is to setup a fully functional end-to-end monitoring with Sakuli, OMD and Docker. Sometime this use case is also called "application monitoring", but however Sakuli will no detect if an application is down, has functional errors or even have a performance issue.
 
-After all is set up, the example test cases can now be used as template for your own e2e tests and monitoring environment. With the release `1.1.0` it's also possible to run the whole setup in container management solutions like https://kubernetes.io[Kubernetes] or https://openshift.io/[OpenShift]. To get more information about this or about how to write your own e2e tests take a look to our official http://consol.github.io/sakuli/latest/index.html[Sakuli Documentation].
+After all is set up, the example test cases can now be used as template for your own e2e tests and monitoring environment. With the release `1.1.0` it's also possible to run the whole setup in container management solutions like https://kubernetes.io[Kubernetes] or https://openshift.io/[OpenShift]. To get more information about this or about how to write your own e2e tests take a look to our other https://github.com/ConSol/sakuli-examples[Tutorials] or to the official http://consol.github.io/sakuli/latest/index.html[Sakuli Documentation].
 
 If you need help or you have some further questions feel free to contact us through `sakuli@consol.de` or open an issue at Github: https://github.com/ConSol/sakuli-examples/issues/new[github.com/sakuli-examples/issues].
 
