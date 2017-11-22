@@ -136,7 +136,7 @@ To start the both testcases in parallel simply execute:
 During the execution you can open the link:vnc_overview_local.html[VNC Overview Page] to watch the test case execution in live via VNC. The CLI option `--force-recreate` is needed to force Docker Compose to truly start a fresh container instance of the image.
 
 .link:vnc_overview_local.html[VNC Overview Page]
-image:.pics/vnc_overview.png[VNC overview page docker containers]
+image:.pics/vnc_overview.gif[VNC overview page docker containers]
 
 After the execution will find two finished containers:
 
