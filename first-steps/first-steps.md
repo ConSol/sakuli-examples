@@ -1,9 +1,9 @@
 
 # Tutorial: first steps with Sakuli
 
-This tutorial requires that you have [installed the Sakuli client](https://github.com/ConSol/sakuli/blob/master/docs/installation-client.md) on a Windows or Linux operating system and that the [functionality test](https://github.com/ConSol/sakuli/blob/master/docs/installation-client.md#test) finished successfully. The steps described here are written for a windows based test, but apply for all operating systems.  
+This tutorial requires that you have [installed the Sakuli client](http://consol.github.io/sakuli/latest/index.html#native-execution) on a Windows or Linux operating system and that the mentioned **functionality tests** finished successfully. The steps described here are written for a windows based test, but apply for all operating systems.  
 
-As you perhaps know from the [documentation preface](../README.md#concept-of-sakuli), Sakuli is not a new automation tool, but "only" combines two existent tools, so that both can be used line-by-line in one test case. This offers you a great flexibility e.g. when writing web tests which contain hurldes like Java/Flash content or even off-browser elements.
+As you perhaps know from the [documentation preface](http://consol.github.io/sakuli/latest/index.html#concept), Sakuli is not a new automation tool, but "only" combines two existent tools, so that both can be used line-by-line in one test case. This offers you a great flexibility e.g. when writing web tests which contain hurldes like Java/Flash content or even off-browser elements.
 
 That in turn means that you have to learn to deal with *two* different testing techniques: [Sahi](http://sahi.co.in) (to test browser content) and [Sikuli](http://sikuli.org) (to click/type on regions which were recognized by screenshot patterns).
 
@@ -74,7 +74,7 @@ Ups. You will be presented a page like this:
 
 What happened? Sahi, acting as a proxy, opened the https page, and delivered it to your browser also with https, but this time with a *self signed* server certificate (it cannot sign its certificate with the original root CA... ). Your browser warns you rightly about the fact that you are not connecting directly to consol.de - in fact, you only requested the Sahi proxy. Click on "I understand the risk" and accept the exception.
 
-To check if there are more certificicates to accept (not all of them you are asked for!), close the browser and the Sahi cmd window. Start the Sahi dashboard from `__INSTALL_DIR__/sahi/userdata/bin/start_dashboard.bat/.sh` and follow the instructions   in [Sahi HTTPS](https://github.com/ConSol/sakuli/blob/master/docs/sahi-https.md#mozilla-firefox).
+To check if there are more certificicates to accept (not all of them you are asked for!), close the browser and the Sahi cmd window. Start the Sahi dashboard from `__INSTALL_DIR__/sahi/userdata/bin/start_dashboard.bat/.sh` and follow the instructions   in [Sahi HTTPS](http://consol.github.io/sakuli/latest/index.html#sahi-https).
 
 ## record Sahi steps
 *Goals: use the Sahi Controller to identify elements on the page, write Sahi methods*
@@ -94,17 +94,17 @@ Open the Sahi Controller (hold the `ALT` key on Windows or `CTRL + ALT` on Linux
 
 ![controller](images/tutorial_contoller.png)
 
-First, we want Sahi to check if there is the Sakuli Logo on the page. Hold the Ctrl key and move the mouse pointer on the Sakuli logo. Watch the Sahi Controller: it detects the HTML elements below the mouse pointer and generates the [accessor method for "image"](http://sahipro.com/docs/sahi-apis/accessor-apis.html#_image) automagically:
+First, we want Sahi to check if there is the Sakuli Logo on the page. Hold the Ctrl key and move the mouse pointer on the Sakuli logo. Watch the Sahi Controller: it detects the HTML elements below the mouse pointer and generates the [accessor method for "image"](http://sahipro.com/docs/sahi-apis/accessor-apis.html#_image) automatically:
 
 ![logo_accessor](images/tutorial_logo_accessor.png)
 
-Click on "Assert" to let Sahi autogenerate [assertion methods](http://sahipro.com/docs/sahi-apis/assertions.html):
+Click on "Assert" to let Sahi automatically generate [assertion methods](http://sahipro.com/docs/sahi-apis/assertions.html):
 
 ![assert](images/tutorial_assert2.png)
 
 Just copy the second line (which checks the visibility of an element) into the clipboard and paste it into `sakuli_page.js` before the "sleep" statement.
 
-Furtheron, we want to assure that the contact form of the web page os displayed correctly. Move the mouse pointer down to the "Kontakt" link; Sahi should display the accessor `_image("Kontakt zu ConSol")` (1). This time use the "click" button on the controller (2) to execute a click; this also generates the complete [browser action](http://sahipro.com/docs/sahi-apis/action-apis.html) statement (3) which you can copy/paste also into the test case:
+Furthermore, we want to assure that the contact form of the web page os displayed correctly. Move the mouse pointer down to the "Kontakt" link; Sahi should display the accessor `_image("Kontakt zu ConSol")` (1). This time use the "click" button on the controller (2) to execute a click; this also generates the complete [browser action](http://sahipro.com/docs/sahi-apis/action-apis.html) statement (3) which you can copy/paste also into the test case:
 
 ![click](images/tutorial_click_action.png)  
 
@@ -135,15 +135,15 @@ After you have clicked on "stop", open the recorded file, copy everything and pa
 ## Create GUI aware actions
 *Goals: learn to take screenshots for GUI pattern detection and write code to detect Regions on your Screen*
 
-The GUI-Actions described in the [Sakuli-API documentation](https://github.com/ConSol/sakuli/blob/master/docs/sakuli-api.md) are implemented on top of the [Sikuli-API](https://github.com/RaiMan/SikuliX-2014). As example we will add the page as a bookmark and after that remove this bookmark again (do not ask for the sense - it's only a demo). Insert the "sleep"  line again as the very first statement within the "try"-block. Run the test again, it should hold as soon the Sakuli page has loaded.
+The GUI-Actions described in the [Sakuli-API documentation](http://consol.github.io/sakuli/latest/index.html#sakuli-api) are implemented on top of the [Sikuli-API](https://github.com/RaiMan/SikuliX-2014). As example we will add the page as a bookmark and after that remove this bookmark again (do not ask for the sense - it's only a demo). Insert the "sleep"  line again as the very first statement within the "try"-block. Run the test again, it should hold as soon the Sakuli page has loaded.
 
 Adding a page as a bookmark is (in firefox) to click on the star icon in the menu bar:
 
 ![star](images/tutorial_star.png)
 
-Take a screeshot of this menu item which looks similar to this one and save the image as "star.png" in the same folder as the Sakuli script.
+Take a screenshot of this menu item which looks similar to this one and save the image as "star.png" in the same folder as the Sakuli script.
 
-For Sikuli there is no record functionality as in Sahi, so we have to code. But keep your hair on, the syntax is easy and [well documented](https://github.com/ConSol/sakuli/blob/master/docs/sakuli-api.md). Write the "waitForImage" statement right before the sleep line:
+For Sikuli there is no record functionality as in Sahi, so we have to code. But keep your hair on, the syntax is easy and [well documented](http://consol.github.io/sakuli/latest/index.html#sakuli-api). Write the "waitForImage" statement right before the sleep line:
 
 ```
 try {
@@ -186,3 +186,5 @@ The complete code looks now:
 This code isn't very sensful, but it demonstrates how Sakuli makes it possible to use two completely different automation tools in one single test file. We are sure you have better fields of application - **have fun with Sakuli :-)**
 
 ![mov](images/sakuli-first-steps.gif)
+
+Further information you will at our official [Sakuli Documentation]http://consol.github.io/sakuli/latest/)
