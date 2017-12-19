@@ -33,7 +33,7 @@
         - "grafana"
         - "screenshot_history"
       args:
-        chdir: "$OMD_ROOT/share/sakuli/setup"
+        chdir: "$OMD_ROOT/share/sakuli/setup/omd"
 
   roles:
     - lm_checks
