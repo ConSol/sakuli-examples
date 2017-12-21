@@ -21,7 +21,7 @@ import static org.testng.Assert.assertTrue;
  */
 public class GitHubSakuliSeExampleTest extends AbstractSakuliSeTest {
 
-    private static final String SAKULI_URL = "https://github.com/ConSol/sakuli/blob/master/README.md";
+    private static final String SAKULI_URL = "https://github.com/ConSol/sakuli/blob/master/README.adoc";
 
     @Test
     @SakuliTestCase(additionalImagePaths = "/common_pics")
