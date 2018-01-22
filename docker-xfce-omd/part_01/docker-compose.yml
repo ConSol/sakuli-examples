@@ -1,8 +1,7 @@
 # Run test in two separated environments: Ubuntu/Firefox and CentOS/Chrome
 
-# TODO TS UPDATE to new version 1.1.0
 sakuli_test_ubuntu_firefox:
-  image: consol/sakuli-ubuntu-xfce:dev
+  image: consol/sakuli-ubuntu-xfce:v1.1.0
   volumes:
   - .:/opt/test
   ports:
@@ -12,7 +11,7 @@ sakuli_test_ubuntu_firefox:
   command: run /opt/test/example_xfce
 
 sakuli_test_centos_chrome:
-  image: consol/sakuli-centos-xfce:dev
+  image: consol/sakuli-centos-xfce:v1.1.0
   volumes:
   - .:/opt/test
   ports:
