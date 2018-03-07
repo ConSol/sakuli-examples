@@ -52,7 +52,7 @@ try {
     env.typeAndDecrypt("i3wqbuF0cNS1csqvKmzkYENv+up0qT6gysSDRb247dg=").type(Key.ENTER);
 
     env.paste("Initial test passed. Sakuli, Sahi and Sikuli seem to work fine. Exiting...");
-    screen.find("gedit_result").highlight(10);
+    screen.find("gedit_result").highlight();
     testCase.endOfStep("Editor", 15);
 
 } catch (e) {

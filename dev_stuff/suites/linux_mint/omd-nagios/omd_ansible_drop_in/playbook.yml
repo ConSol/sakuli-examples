@@ -4,36 +4,5 @@
   hosts: all
   environment:
     OMD_ROOT: "/opt/omd/sites/{{ SITENAME }}"
-  pre_tasks:
-    - name: configure OMD site
-      command: omd config "{{ SITENAME }}" set {{item}}
-      with_items:
-        - "PNP4NAGIOS off"
-        - "GRAFANA on"
-        - "INFLUXDB on"
-        - "NAGFLUX on"
-        - "DEFAULT_GUI thruk"
-        - "THRUK_COOKIE_AUTH on"
-        - "GEARMAND on"
-        - "GEARMAND_PORT 0.0.0.0:4730"
-        - "GEARMAN_NEB on"
-        - "MOD_GEARMAN on"
-        - "GEARMAN_WORKER off"
-        - "CORE nagios"
-        - "TMPFS off"
-
-    - name: Configure mod-gearman
-      command: sed -i -e 's/\(services\|eventhandler\|hosts\|encryption\)=yes/\1=no/' -e 's/\(accept_clear_results\)=no/\1=yes/' $OMD_ROOT/etc/mod-gearman/server.cfg
-
-    - name: configure Sakuli extension
-      become: yes
-      become_user: "{{ SITENAME }}"
-      command: make "{{ item }}"
-      with_items:
-        - "grafana"
-        - "screenshot_history"
-      args:
-        chdir: "$OMD_ROOT/share/sakuli/setup/omd"
-
   roles:
     - lm_checks

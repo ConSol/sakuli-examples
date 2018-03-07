@@ -1,6 +1,6 @@
 omd-nagios:
     container_name: omd-nagios
-    image: consol/omd-labs-centos:nightly
+    image: consol/omd-labs-centos-sakuli:grafana
     ports:
     - 8043:443
     - 4730:4730
@@ -8,5 +8,4 @@ omd-nagios:
     environment:
     - TZ=Europe/Berlin
     volumes:
-    - /etc/localtime:/etc/localtime
     - ./omd_ansible_drop_in/:/root/ansible_dropin
