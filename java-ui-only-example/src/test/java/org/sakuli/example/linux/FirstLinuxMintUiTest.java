@@ -47,7 +47,6 @@ public class FirstLinuxMintUiTest extends AbstractSakuliLinuxTest {
             screen.waitForImage("calculator.png", 5).highlight()
                     .mouseMove();
 
-            //TODO TS check why region is not correct
             Region calcRegion = calculator.getRegion().highlight();
             calcRegion.type("525")
                     .type(Key.ADD)

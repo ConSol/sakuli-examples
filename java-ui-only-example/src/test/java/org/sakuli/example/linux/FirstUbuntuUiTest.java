@@ -1,5 +1,7 @@
 package org.sakuli.example.linux;
 
+import org.sakuli.actions.screenbased.Key;
+import org.sakuli.actions.screenbased.Region;
 import org.sakuli.javaDSL.TestCaseInitParameter;
 import org.testng.annotations.Test;
 
@@ -23,11 +25,35 @@ public class FirstUbuntuUiTest extends AbstractSakuliLinuxTest {
         return "Ubuntu";
     }
 
-
-    @Test()
+    @Test
     public void testGedit() throws Exception {
         if (isTargetEnvironment()) {
-            //TODO add testcode and pictures under src/test/resources/org/sakuli/example/linux/ubuntu_ui_test
+            editor.open();
+            screen.find("gedit") //.png is not needed
+                    .setW(300).highlight()
+                    .click()
+                    .paste("Initial test passed. Sakuli, Sahi and Sikuli seem to work fine. Exiting...");
+
+            //validate text
+            screen.find("gedit_result").highlight();
+        }
+    }
+
+    @Test
+    public void testCalculator() {
+        if (isTargetEnvironment()) {
+            calculator.open();
+
+            screen.waitForImage("calculator.png", 5).highlight()
+                    .mouseMove();
+
+            Region calcRegion = calculator.getRegion().highlight();
+            calcRegion.type("525")
+                    .type(Key.ADD)
+                    .type("100")
+                    .type(Key.ENTER);
+
+            screen.waitForImage("625", 5).highlight();
         }
     }
 }

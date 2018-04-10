@@ -27,6 +27,16 @@ This repository contains a bunch of example projects of the end-2-end testing an
     * Runtime environment: local developer machine ***or*** Docker host with Docker Compose based configuration
     * Java unit test with [TestNG](http://testng.org)
     * Integrated in Maven build system
+        
+* **[Java Setup: UI only Testing with Sakuli](./java-ui-only-example/README.md)**
+    * System under test:
+        * Calculator: Windows `calc.exe`, Linux `gnome-calculator`
+        * Editor: Windows `notepad`, Linux `gedit`
+    * Runtime environment: local developer machine ***or*** Vagrant Ubuntu VM
+    * Focus: UI test of native application without starting the browser
+    * Supports different OS layouts
+    * Java unit test with [TestNG](http://testng.org)
+    * Integrated in Maven build system
     
    
 * **[Java Setup: End-2-End Testing with Selenium & Sakuli (under developement)](./java-selenium-example/README.md)**
