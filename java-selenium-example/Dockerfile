@@ -1,5 +1,5 @@
 #TODO change version after release
-FROM consol/sakuli-ubuntu-xfce-java:dev
+FROM consol/sakuli-ubuntu-xfce-java:v1.2.0-247-sakuli-se-SNAPSHOT
 
 MAINTAINER Tobias Schneck "tobias.schneck@consol.de"
 ENV REFRESHED_AT 2018-04-23
