@@ -1,18 +1,11 @@
 package org.sakuli.example.citrus;
 
-import org.junit.Ignore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.sakuli.actions.logging.Logger;
 import org.sakuli.actions.screenbased.Key;
-import org.sakuli.actions.screenbased.Region;
 import org.sakuli.example.AbstractSakuliSeTest;
-import org.sakuli.exceptions.SakuliException;
 import org.sakuli.selenium.testng.SakuliTestCase;
 import org.testng.annotations.Test;
-
-import java.util.Optional;
-import java.util.function.Supplier;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -21,9 +14,9 @@ import static org.testng.Assert.assertTrue;
  * Test the website of the Citrus integration testing framework.
  *
  * @author tschneck
- *         Date: 12/2/15
+ * Date: 12/2/15
  */
-public class FirstSakuliSeExampleTest extends AbstractSakuliSeTest {
+public class CitrusHtmlPdfTest extends AbstractSakuliSeTest {
 
     private static final String CITRUS_URL = "http://www.citrusframework.org/";
     private static int hSec = 2;

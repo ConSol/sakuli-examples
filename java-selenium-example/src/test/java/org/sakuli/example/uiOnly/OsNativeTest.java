@@ -1,16 +1,17 @@
 package org.sakuli.example.uiOnly;
 
 import org.apache.commons.lang.StringUtils;
-import org.junit.Assert;
 import org.sakuli.actions.environment.Application;
 import org.sakuli.actions.environment.Environment;
 import org.sakuli.actions.logging.Logger;
 import org.sakuli.actions.screenbased.Region;
+import org.sakuli.example.AbstractSakuliSeTest;
 import org.sakuli.selenium.actions.testcase.SeTestCaseAction;
 import org.sakuli.selenium.testng.SakuliSeTest;
 import org.sakuli.selenium.testng.SakuliTestCase;
 import org.sakuli.utils.ResourceHelper;
 import org.sikuli.script.Key;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
@@ -18,7 +19,7 @@ import org.testng.annotations.Test;
 
 /**
  * @author tschneck
- *         Date: 4/27/17
+ * Date: 4/27/17
  */
 @Listeners(SakuliSeTest.class)
 public class OsNativeTest {
@@ -44,8 +45,12 @@ public class OsNativeTest {
 
     private void checkEnvironment() throws Exception {
         if (StringUtils.isNotBlank(System.getenv("VNC_PORT"))) {
-            Logger.logInfo("----- load XFCE based screenshots");
-            tc.addImagePaths(ResourceHelper.getClasspathResource(OsNativeTest.class, "xfce-env", "image folder for XFCE env not found"));
+            Logger.logInfo("----- Load XFCE screenshots");
+            tc.addImagePaths(ResourceHelper.getClasspathResource(OsNativeTest.class, "xfce-env", "image folder for XFCE not found"));
+        }
+        if (AbstractSakuliSeTest.isTargetEnvironment("LinuxMint")) {
+            Logger.logInfo("----- Load LinuxMint screenshots");
+            tc.addImagePaths(ResourceHelper.getClasspathResource(OsNativeTest.class, "mint", "image folder for LinuxMint not found"));
         }
     }
 
@@ -56,20 +61,21 @@ public class OsNativeTest {
         gedit.open();
 
         // shows fluent API and how sub regions can be used
-        final Region otherDocument = screen.waitForImage("gedit", 5).highlight()
-                .click()
+        final Region geditAnchor = screen.waitForImage("gedit", 5)
+                .highlight()
+                .click();
+        geditAnchor.below(100).highlight().mouseMove();
+
+        final Region otherDocument = geditAnchor
                 .below(200).setW(300).highlight()
                 .waitForImage("search", 20)
                 .highlight()
                 .click()
                 .type("Hello Guys!")
-                .grow(400, 500).highlight(3)
+                .grow(400, 400).highlight(2)
                 .find("other_documents").highlight();
-        ;
+
         otherDocument.click();
-//        final String s = otherDocument.extractText();
-//        Logger.logInfo("TEXT: " + s);
-//        otherDocument.grow(0,600).takeScreenshot("/tmp/button_large");
 
         //open readme file
         screen.waitForImage("cancel_button.png", 5).highlight()
@@ -84,7 +90,5 @@ public class OsNativeTest {
         //assert the readme content
         System.out.println(clipboard);
         Assert.assertTrue(clipboard.contains("Sakuli Selenium"));
-//      env.sleep(9999999);
-
     }
 }
