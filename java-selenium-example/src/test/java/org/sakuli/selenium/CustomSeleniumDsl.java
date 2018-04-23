@@ -5,23 +5,24 @@ package org.sakuli.selenium; /**
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.sakuli.actions.environment.Environment;
 
 //import com.project.setup.WebDriverManager;
 
-public class HighlightElement {
+public class CustomSeleniumDsl {
 
     private JavascriptExecutor javascriptExecutor;
-    private Environment env;
 
-    public HighlightElement(JavascriptExecutor javascriptExecutor) {
+    public CustomSeleniumDsl(JavascriptExecutor javascriptExecutor) {
         this.javascriptExecutor = javascriptExecutor;
-        this.env = new Environment();
     }
 
     public void highlightElement(WebElement element) {
         javascriptExecutor.executeScript("arguments[0].setAttribute('style', arguments[1]);", element, "color: red; border: 2px solid red;");
-        env.sleepMs(500);
+        try {
+            Thread.sleep(500L);
+        } catch (InterruptedException e) {
+            //ignore
+        }
         javascriptExecutor.executeScript("arguments[0].setAttribute('style', arguments[1]);", element, "");
     }
 }

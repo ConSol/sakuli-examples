@@ -10,7 +10,7 @@ import org.sakuli.actions.screenbased.Region;
 import org.sakuli.datamodel.properties.TestSuiteProperties;
 import org.sakuli.exceptions.SakuliActionException;
 import org.sakuli.exceptions.SakuliRuntimeException;
-import org.sakuli.selenium.HighlightElement;
+import org.sakuli.selenium.CustomSeleniumDsl;
 import org.sakuli.selenium.actions.testcase.SeTestCaseAction;
 import org.sakuli.selenium.testng.SakuliSeTest;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 public abstract class AbstractSakuliSeTest {
     private static Logger LOGGER = LoggerFactory.getLogger(AbstractSakuliSeTest.class);
     protected WebDriver driver;
-    protected HighlightElement dsl;
+    protected CustomSeleniumDsl dsl;
     protected Region screen;
     protected Environment env;
     protected SeTestCaseAction tcAction;
@@ -64,7 +64,7 @@ public abstract class AbstractSakuliSeTest {
     public void setUp() throws Exception {
         env = new Environment();
         driver = getSeleniumDriver();
-        dsl = new HighlightElement((JavascriptExecutor) driver);
+        dsl = new CustomSeleniumDsl((JavascriptExecutor) driver);
         screen = new Region();
         tcAction = new SeTestCaseAction();
     }

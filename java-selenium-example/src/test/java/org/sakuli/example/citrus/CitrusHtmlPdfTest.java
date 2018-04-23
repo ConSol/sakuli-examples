@@ -34,7 +34,7 @@ public class CitrusHtmlPdfTest extends AbstractSakuliSeTest {
     public void testCitrusHtmlContent() throws Exception {
         testCitrusContent("HTML");
 
-        //VALIDATE HTML content
+        //validate HTML content
         WebElement heading = driver.findElement(By.tagName("h1"));
         dsl.highlightElement(heading);
         assertEquals(heading.getText(), "Citrus");
