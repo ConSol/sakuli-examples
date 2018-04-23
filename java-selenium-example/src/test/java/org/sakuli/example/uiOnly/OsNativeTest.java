@@ -56,7 +56,7 @@ public class OsNativeTest {
 
     @Test
     @SakuliTestCase(warningTime = 50, criticalTime = 60)
-    public void testNativeFileContentAccessesOverUI() throws Exception {
+    public void testEditorOpensReadMe() throws Exception {
         checkEnvironment();
         gedit.open();
 
@@ -64,14 +64,17 @@ public class OsNativeTest {
         final Region geditAnchor = screen.waitForImage("gedit", 5)
                 .highlight()
                 .click();
+        // move focus mouse pointer
         geditAnchor.below(100).highlight().mouseMove();
 
+        // use already known region
         final Region otherDocument = geditAnchor
+                // great larger search region
                 .below(200).setW(300).highlight()
-                .waitForImage("search", 20)
-                .highlight()
+                .waitForImage("search", 20).highlight()
                 .click()
                 .type("Hello Guys!")
+                // base region of "search" button grows 400px
                 .grow(400, 400).highlight(2)
                 .find("other_documents").highlight();
 
