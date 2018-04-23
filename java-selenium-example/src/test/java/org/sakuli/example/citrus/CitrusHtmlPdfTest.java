@@ -48,10 +48,12 @@ public class CitrusHtmlPdfTest extends AbstractSakuliSeTest {
     @Test
     @SakuliTestCase(additionalImagePaths = "citrus_pics")
     public void testCitrusPdfContent() throws Exception {
+
+        //opens PDF download page and click download
         testCitrusContent("PDF");
         screen.find("reload_button.png").highlight();
 
-        scroll( //search for logo
+        scroll( //search citrus logo on PDF
                 () -> screen.exists("pdf_citrus_title.png", 1),
                 //scroll action
                 () -> env.type(Key.DOWN).type(Key.DOWN).type(Key.DOWN).type(Key.DOWN),
@@ -60,6 +62,7 @@ public class CitrusHtmlPdfTest extends AbstractSakuliSeTest {
         );
         env.sleep(hSec);
 
+        //navigate over bookmark menu of PDF viewer
         screen.find("reload_button.png")
                 .below(40).highlight()
                 .mouseMove();
@@ -67,6 +70,7 @@ public class CitrusHtmlPdfTest extends AbstractSakuliSeTest {
         screen.find("bookmark_entry.png").highlight().click();
         screen.find("test_case_pdf_heading.png").highlight().click();
 
+        //scroll until the expected diagram is visible
         scroll(() -> screen.exists("test_case_diagram.png", 1),
                 () -> env.type(Key.DOWN).type(Key.DOWN).type(Key.DOWN).type(Key.DOWN),
                 10
