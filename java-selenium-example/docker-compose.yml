@@ -1,8 +1,8 @@
 version: '2'
+# run with: docker-compose up --build --force-recreate
 
 services:
   sakuli_se_test:
-#    image: consol/sakuli-ubuntu-xfce-java:v1.1.0-beta
     build: .
     environment:
     - TZ=Europe/Berlin
