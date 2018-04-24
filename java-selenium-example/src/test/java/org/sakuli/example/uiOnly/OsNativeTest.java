@@ -44,7 +44,7 @@ public class OsNativeTest {
     }
 
     private void checkEnvironment() throws Exception {
-        if (StringUtils.isNotBlank(System.getenv("VNC_PORT"))) {
+        if (StringUtils.isNotBlank(env.getEnv("VNC_PORT"))) {
             Logger.logInfo("----- Load XFCE screenshots");
             tc.addImagePaths(ResourceHelper.getClasspathResource(OsNativeTest.class, "xfce-env", "image folder for XFCE not found"));
         }
