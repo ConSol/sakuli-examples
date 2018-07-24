@@ -1,5 +1,5 @@
 #TODO change version after release
-FROM consol/sakuli-ubuntu-xfce-java:v1.2.0-247-sakuli-se-SNAPSHOT
+FROM consol/sakuli-ubuntu-xfce-java:v1.3.0-247-sakuli-se-SNAPSHOT
 
 MAINTAINER Tobias Schneck "tobias.schneck@consol.de"
 ENV REFRESHED_AT 2018-04-23
@@ -18,5 +18,5 @@ RUN mkdir $WEB_DRIVER && cd $WEB_DRIVER \
     && wget https://chromedriver.storage.googleapis.com/2.25/chromedriver_linux64.zip \
     && unzip *.zip && rm *.zip && ls -la
 #firefox
-#RUN wget -qO- https://github.com/mozilla/geckodriver/releases/download/v0.20.1/geckodriver-v0.20.1-linux64.tar.gz \
-#    | tar xz -C  $WEB_DRIVER
+RUN wget -qO- https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz \
+    | tar xz -C  $WEB_DRIVER

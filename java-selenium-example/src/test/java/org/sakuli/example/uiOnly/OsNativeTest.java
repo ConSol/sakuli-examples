@@ -69,7 +69,7 @@ public class OsNativeTest {
 
         // use already known region
         final Region otherDocument = geditAnchor
-                // great larger search region
+                // create larger search region
                 .below(200).setW(300).highlight()
                 .waitForImage("search", 20).highlight()
                 .click()

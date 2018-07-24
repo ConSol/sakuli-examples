@@ -8,7 +8,7 @@
     <artifactId>java-selenium-example</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
-        <sakuli.se.version>1.2.0-247-sakuli-se-SNAPSHOT</sakuli.se.version>
+        <sakuli.se.version>1.3.0-247-sakuli-se-SNAPSHOT</sakuli.se.version>
         <selenium.version>3.11.0</selenium.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
