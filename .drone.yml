@@ -13,7 +13,7 @@ pipeline:
     image: toschneck/sakuli-se-example:test
     environment:
     - TZ=Europe/Berlin
-    - SAKULI_TEST_SUITE=/drone/src/java-selenium-example
+    - SAKULI_TEST_SUITE=java-selenium-example
     user: "1000"
     #only for caching
     volumes:
