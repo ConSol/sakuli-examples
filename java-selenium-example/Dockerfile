@@ -9,7 +9,7 @@ USER 0
 RUN apt-get update \
     && apt-get install -y gedit \
     && apt-get clean -y
-#USER 1000
+USER 1000
 
 ### Install webdriver
 ENV WEB_DRIVER /headless/webdriver
