@@ -1,0 +1,18 @@
+pipeline:
+  sakuli-se-build-tester-image:
+    image: plugins/docker
+    repo: toschneck/sakuli-se-example
+    tag: test
+    secrets: [ docker_username, docker_password ]
+    dockerfile: java-selenium-example/Dockerfile
+    volumes:
+    - docker-cache:/var/lib/docker
+
+  sakuli-se-run-UI-test:
+    image: toschneck/sakuli-se-example:test
+    environment:
+    - TZ=Europe/Berlin
+    - SAKULI_TEST_SUITE=/drone/src/java-selenium-example
+    user: "1000"
+    volumes:
+    - data:/headless/.m2
