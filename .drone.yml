@@ -5,6 +5,7 @@ pipeline:
     tag: test
     secrets: [ docker_username, docker_password ]
     dockerfile: java-selenium-example/Dockerfile
+    #only for caching
     volumes:
     - docker-cache:/var/lib/docker
 
@@ -14,5 +15,6 @@ pipeline:
     - TZ=Europe/Berlin
     - SAKULI_TEST_SUITE=/drone/src/java-selenium-example
     user: "1000"
+    #only for caching
     volumes:
     - data:/headless/.m2
