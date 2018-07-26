@@ -6,8 +6,8 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     dockerfile: java-selenium-example/Dockerfile
     #only for caching
-  #    volumes:
-  #    - docker-cache:/var/lib/docker
+    volumes:
+    - docker-cache:/var/lib/docker
 
   sakuli-se-run-UI-test:
     image: toschneck/sakuli-se-example:test
@@ -15,5 +15,5 @@ pipeline:
     - TZ=Europe/Berlin
     - SAKULI_TEST_SUITE=java-selenium-example
     #only for caching
-#    volumes:
-#    - data:/headless/.m2
+    volumes:
+    - data:/headless/.m2
