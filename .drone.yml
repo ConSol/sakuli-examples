@@ -14,7 +14,6 @@ pipeline:
     environment:
     - TZ=Europe/Berlin
     - SAKULI_TEST_SUITE=java-selenium-example
-    user: "0"
     #only for caching
     volumes:
     - data:/headless/.m2
