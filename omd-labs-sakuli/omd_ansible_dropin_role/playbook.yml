@@ -1,6 +1,0 @@
----
-
-- name: "Configure Sakuli E2E checks for Site: {{ SITENAME }}"
-  hosts: all
-  roles:
-    - config_checks
