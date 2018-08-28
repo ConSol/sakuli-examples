@@ -16,7 +16,7 @@ services:
 
   omdlabs:
       container_name: omdlabs
-      image: consol/omd-labs-centos-sakuli:dev
+      image: consol/omd-labs-centos-sakuli:grafana
       volumes:
         - ./ansible_dropin/:/root/ansible_dropin
       ports:
