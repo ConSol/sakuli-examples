@@ -1,0 +1,27 @@
+# docker create -v /var/lib/check_mk_agent/spool --name check_mk_spool consol/sakuli-omd-labs-ubuntu /bin/true
+
+omdmk:
+    container_name: omdmk
+    image: consol/omd-labs-ubuntu
+    volumes:
+    - ./ansible_dropin/:/root/ansible_dropin
+    # - /var/lib/check_mk_agent/spool
+    - ./spool:/var/lib/check_mk_agent/spool
+    ports:
+    - "8443:443"
+
+sakuli:
+    container_name: sakulie2e
+    image: consol/sakuli-ubuntu-xfce:dev
+    volumes:
+      - ./example_xfce:/headless/sakuli_docker_test
+    # - ./sahi_ff_profile_template:/root/sakuli/sahi/config/ff_profile_template
+    # - ./sahi_certs:/root/sakuli/sahi/userdata/certs
+    volumes_from:
+    - omdmk
+    ports:
+    - "5901:5901"
+    - "6901:6901"
+    command: "run /headless/sakuli_docker_test -loop 1"
+    links:
+    - omdmk

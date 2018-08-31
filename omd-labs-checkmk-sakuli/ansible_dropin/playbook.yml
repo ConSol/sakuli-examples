@@ -1,0 +1,41 @@
+---
+# 2017, Simon Meggle, simon.meggle@consol.de
+
+- name: execute ansible drop-in playbook
+  hosts: all
+  vars: 
+    OMD_ROOT: "/opt/omd/sites/{{ SITENAME }}"
+  tasks:
+
+  - name: Set Multisite GUI, disable Thruk cookie auth
+    command: omd config demo set {{item}}
+    with_items:
+      - "DEFAULT_GUI check_mk"
+      - "THRUK_COOKIE_AUTH off"
+      - "CORE nagios"
+
+  - name: install MK agent package
+    shell: dpkg -i /opt/omd/versions/default/share/check_mk/agents/check-mk-agent_*_all.deb
+
+  - name: install sudo
+    apt: name=sudo state=present
+
+  - name: install check_mk config
+    synchronize:
+      src: check_mk/
+      dest: "{{ OMD_ROOT }}/etc/check_mk"
+
+  - name: access rights for check_mk
+    file:
+      path: "{{ OMD_ROOT }}/etc/check_mk"
+      state: directory
+      owner: demo
+      group: demo
+      recurse: yes
+
+  - name: do an inventory scan on localhost
+    become: yes
+    become_user: demo
+    environment:
+      OMD_ROOT: "{{ OMD_ROOT }}"
+    shell: "bash -lc '$OMD_ROOT/bin/check_mk -IIUv localhost'"

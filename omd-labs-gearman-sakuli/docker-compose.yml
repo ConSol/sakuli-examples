@@ -1,0 +1,20 @@
+sakuli:
+    container_name: sakulie2e
+    image: consol/sakuli-centos-xfce:dev
+    volumes:
+    - ./sakuli_testcase/example_xfce:/root/example_xfce
+    ports:
+    - "5901:5901"
+    - "6901:6901"
+    command: "run /root/example_xfce -loop 1"
+    links:
+    - omdlabs:omd
+
+omdlabs:
+    container_name: omdlabs
+    image: consol/omd-labs-centos:nightly
+    #image: local/omd-labs-centos:nightly
+    volumes:
+    - ./ansible_dropin/:/root/ansible_dropin
+    ports:
+    - "8443:443"

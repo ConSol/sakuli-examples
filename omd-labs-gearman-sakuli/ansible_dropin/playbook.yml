@@ -1,0 +1,37 @@
+---
+
+- name: execute ansible drop-in playbook
+  hosts: all
+  environment:
+    OMD_ROOT: "/opt/omd/sites/{{ SITENAME }}"
+  tasks:
+  - name: configure Sakuli extension
+    become: yes
+    become_user: "{{ SITENAME }}"
+    become_method: "su"
+    become_flags: "-"
+    command: make "{{ item }}"
+    with_items:
+      - "grafana"
+      - "screenshot_history"
+      - "gearman"
+    args:
+      chdir: "$OMD_ROOT/share/sakuli/setup/omd"
+
+  - name: set Nagios core
+    command: omd config demo set CORE nagios
+
+  - name: Copy Nagios config file
+    copy:
+      src: sakuli_nagios_objects.cfg
+      dest: "$OMD_ROOT/etc/nagios/conf.d/sakuli_nagios_objects_demo.cfg"
+      owner: "{{ SITENAME }}"
+
+  - name: Copy Histou template
+    copy:
+      src: check_sakuli.php
+      dest: "$OMD_ROOT/etc/histou/templates/custom/check_sakuli.php"
+      owner: "{{ SITENAME }}"
+
+  - name: Reload monitoring core
+    command: omd restart demo
