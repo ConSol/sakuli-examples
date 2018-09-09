@@ -16,7 +16,7 @@ services:
     - 6911:6901
     # to keep container running and login via `docker exec -it javaexample_sakuli_java_test_1 bash`
 #    command: "'--tail-log'"
-    command: mvn clean test -P docker -f /opt/maven/pom.xml
+    command: mvn clean test -P docker -f /opt/maven/pom.xml -Dtest=OsNativeTest,Citrus*
 
 volumes:
   data:
