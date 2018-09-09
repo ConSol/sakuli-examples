@@ -54,11 +54,11 @@ public class CitrusHtmlPdfTest extends AbstractSakuliSeTest {
         screen.find("reload_button.png").highlight();
 
         scroll( //search citrus logo on PDF
-                () -> screen.exists("pdf_citrus_title.png", 1),
+                () -> screen.exists("pdf_citrus_title.png", 5),
                 //scroll action
                 () -> env.type(Key.DOWN).type(Key.DOWN).type(Key.DOWN).type(Key.DOWN),
                 //times to try
-                10
+                12
         );
         env.sleep(hSec);
 
