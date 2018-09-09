@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
  */
 public class GitHubSakuliSeExampleTest extends AbstractSakuliSeTest {
 
-    private static final String SAKULI_URL = "https://github.com/ConSol/sakuli/blob/master/README.adoc";
+    private static final String SAKULI_URL = "https://github.com/ConSol/sakuli-examples/blob/master/java-selenium-example/README.md";
 
     @Test
     @SakuliTestCase(additionalImagePaths = "/common_pics")

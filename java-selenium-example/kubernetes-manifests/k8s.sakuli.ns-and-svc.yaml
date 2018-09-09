@@ -1,0 +1,23 @@
+#### POD config (run one time)
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sakuli
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    application: selenium-ui-test
+  namespace: sakuli
+  name: selenium-ui-test
+spec:
+  externalName: selenium-ui-test
+  ports:
+  - name: http-port-tcp
+    protocol: TCP
+    port: 80
+    targetPort: 6901
+  selector:
+    application: selenium-ui-test
+  type: LoadBalancer

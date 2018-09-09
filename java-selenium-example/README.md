@@ -1,3 +1,4 @@
+![sakuli-logo](https://github.com/ConSol/sakuli/raw/master/docs/images/sakuli_logo_small.png)
 # Sakuli Selenium Integration Example
 
 This is an example Project-Setup to integrate [Selenium](https://www.selenium.org) with your Sakuli Tests.
@@ -44,3 +45,17 @@ To run a specific test you use the maven option `-Dtest=MyTest*`
 To use a more comfortable setup user [Docker Compose]():
 
     docker-compose up --build --force-recreate
+    
+## Run with skaffold
+
+First create a new k8s cluster, e.g. under https://cloud.kubermatic.io (recommend is AWS so that an external load balancer is provided). Download and set correct `kubeconfig`.
+
+    export KUBECONFIG=~/Downloads/kubeconfig-CI-cluster 
+    
+Install the `cleanup-operator` of [lwolf/kube-cleanup-operator](https://github.com/lwolf/kube-cleanup-operator):
+
+    kubectl apply -f kubernetes-manifests/cleanup-operator/*.yaml
+
+Run skaffold build & run:
+
+    skaffold run

@@ -51,6 +51,8 @@ public class CitrusHtmlPdfTest extends AbstractSakuliSeTest {
 
         //opens PDF download page and click download
         testCitrusContent("PDF");
+
+//        env.sleep(60);
         screen.find("reload_button.png").highlight();
 
         scroll( //search citrus logo on PDF

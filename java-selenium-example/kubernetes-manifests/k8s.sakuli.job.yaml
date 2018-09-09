@@ -1,0 +1,74 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: sakuli
+  labels:
+    application: selenium-ui-test
+  name: selenium-ui-test
+spec:
+  activeDeadlineSeconds: 3600
+  backoffLimit: 1
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      name: sakuli
+      labels:
+        application: selenium-ui-test
+        instance: sakuli-job
+    spec:
+      ### ensure that the pod won't start again
+      restartPolicy: Never
+      dnsPolicy: ClusterFirst
+      terminationGracePeriodSeconds: 5
+      containers:
+      - name: selenium-ui-test
+        image: toschneck/sakuli-se-example
+        imagePullPolicy: Always
+        env:
+        - name: KUBERNETES_RUN_MODE
+          value: 'job'
+        - name: JVM_HEAP_XMX_MAX
+          value: '350'
+        - name: TZ
+          value: 'Europe/Berlin'
+          #    args:
+          ### make normal UI startup to connect via: oc rsh <pod-name> bash
+          #- '--tail-log'
+          ### run in chrome
+          # - 'run'
+          # - '/headless/sakuli/test'
+          # - '-browser'
+          # - 'chrome'
+          ### set e.g. debug level
+          #- '-D'
+        #- 'log.level.sakuli=DEBUG'
+        args:
+        #        - "-t"
+        - "mvn"
+        - "clean"
+        - "test"
+        - "-P"
+        - "docker"
+        - "-f"
+        - "/opt/test/pom.xml"
+        ### checks that vnc server is up and running
+        livenessProbe:
+          tcpSocket:
+            port: 5901
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        ### checks if http-vnc connection is working
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 6901
+            scheme: HTTP
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        ### specifiy resource limits
+        resources:
+          limits:
+            cpu: 750m
+            memory: 2200Mi

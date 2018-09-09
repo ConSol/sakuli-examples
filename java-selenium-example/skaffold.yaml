@@ -5,11 +5,13 @@ build:
     gitCommit: {}
   artifacts:
   - imageName: toschneck/sakuli-se-example
+    docker:
+      dockerfilePath: Dockerfile.skaffold
+
 deploy:
   kubectl:
     manifests:
     - ./kubernetes-manifests/**.yaml
-
 
 profiles:
 # "travis-ci" profile is used to build the images without
