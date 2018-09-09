@@ -17,6 +17,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import java.nio.file.Path;
+
 /**
  * @author tschneck
  * Date: 4/27/17
@@ -58,6 +60,7 @@ public class OsNativeTest {
     @SakuliTestCase(warningTime = 50, criticalTime = 60)
     public void testEditorOpensReadMe() throws Exception {
         checkEnvironment();
+
         gedit.open();
 
         // shows fluent API and how sub regions can be used
@@ -81,14 +84,16 @@ public class OsNativeTest {
         otherDocument.click();
 
         //open readme file
+        final Path readMeFile = ResourceHelper.getClasspathResource(this.getClass(), "README.md", "resolve test file 'README.md'");
         screen.waitForImage("cancel_button.png", 5).highlight()
                 .left(50).highlight().click()
-                .type("README").type(Key.ENTER)
+                .type(readMeFile.toAbsolutePath().normalize().toString())
+                .type(Key.ENTER)
                 .sleep(2);
-        screen.find("gedit").highlight();
+        gedit.focus();
 
         //mark all and copy it to the clipboard
-        env.type("a", Key.CTRL).type("c", Key.CTRL);
+        env.type("a", Key.CTRL).sleep(1).type("c", Key.CTRL);
         final String clipboard = env.getClipboard();
         //assert the readme content
         System.out.println(clipboard);
