@@ -60,16 +60,16 @@ spec:
         livenessProbe:
           tcpSocket:
             port: 5901
-          initialDelaySeconds: 5
-          timeoutSeconds: 5
+          initialDelaySeconds: 3
+          timeoutSeconds: 1
         ### checks if http-vnc connection is working
         readinessProbe:
           httpGet:
             path: /
             port: 6901
             scheme: HTTP
-          initialDelaySeconds: 5
-          timeoutSeconds: 5
+          initialDelaySeconds: 3
+          timeoutSeconds: 1
         ### specifiy resource limits
         resources:
           limits:
