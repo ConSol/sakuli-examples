@@ -2,7 +2,7 @@
 
 omdmk:
     container_name: omdmk
-    image: consol/omd-labs-ubuntu
+    image: consol/omd-labs-ubuntu:v2.80
     volumes:
     - ./ansible_dropin/:/root/ansible_dropin
     # - /var/lib/check_mk_agent/spool
@@ -12,7 +12,7 @@ omdmk:
 
 sakuli:
     container_name: sakulie2e
-    image: consol/sakuli-ubuntu-xfce:dev
+    image: consol/sakuli-ubuntu-xfce:v1.2.0
     volumes:
       - ./example_xfce:/headless/sakuli_docker_test
     # - ./sahi_ff_profile_template:/root/sakuli/sahi/config/ff_profile_template
