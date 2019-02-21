@@ -1,6 +1,6 @@
 sakuli:
     container_name: sakulie2e
-    image: consol/sakuli-centos-xfce:dev
+    image: consol/sakuli-centos-xfce:v1.2.0
     volumes:
     - ./sakuli_testcase/example_xfce:/root/example_xfce
     ports:
@@ -12,7 +12,7 @@ sakuli:
 
 omdlabs:
     container_name: omdlabs
-    image: consol/omd-labs-centos:nightly
+    image: consol/omd-labs-centos:v2.80
     #image: local/omd-labs-centos:nightly
     volumes:
     - ./ansible_dropin/:/root/ansible_dropin
