@@ -12,7 +12,7 @@ sakuli:
 
 omdlabs:
     container_name: omdlabs
-    image: consol/omd-labs-centos:v2.80
+    image: consol/omd-labs-centos:nightly
     #image: local/omd-labs-centos:nightly
     volumes:
     - ./ansible_dropin/:/root/ansible_dropin
