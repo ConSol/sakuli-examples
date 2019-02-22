@@ -19,12 +19,12 @@
       chdir: "$OMD_ROOT/share/sakuli/setup/omd"
 
   - name: set Nagios core
-    command: omd config demo set CORE nagios
+    command: omd config demo set CORE naemon
 
   - name: Copy Nagios config file
     copy:
       src: sakuli_nagios_objects.cfg
-      dest: "$OMD_ROOT/etc/nagios/conf.d/sakuli_nagios_objects_demo.cfg"
+      dest: "$OMD_ROOT/etc/core/conf.d/sakuli_nagios_objects_demo.cfg"
       owner: "{{ SITENAME }}"
 
   - name: Copy Histou template
